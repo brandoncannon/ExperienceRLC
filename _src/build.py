@@ -205,6 +205,19 @@ LAYOUT = """<!doctype html>
 """
 
 
+def relativize(html, depth):
+    """Turn root-relative links ("/about-us/") into relative ones ("../about-us/")
+    so the site works at any address, e.g. a GitHub Pages test URL."""
+    prefix = "../" * depth
+
+    def fix(m):
+        attr, path = m.group(1), m.group(2)
+        new = prefix + path if (prefix + path) else "./"
+        return f'{attr}="{new}'
+
+    return re.sub(r'\b(href|src|content)="/(?!/)([^"]*)', lambda m: fix(m) if m.group(1) != "content" or m.group(2).startswith(("assets", "prayer", "life-groups")) else m.group(0), html)
+
+
 def build():
     pages = sorted((SRC / "pages").glob("*.html"))
     for page in pages:
@@ -238,6 +251,7 @@ def build():
             out = ROOT / f"{slug}.html"
         else:
             out = ROOT / slug / "index.html"
+        html = relativize(html, len(out.relative_to(ROOT).parts) - 1)
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(html, encoding="utf-8")
         print("built", out.relative_to(ROOT))
@@ -260,6 +274,8 @@ def build():
     }
     for old, new in redirects.items():
         out = ROOT / old / "index.html"
+        if new.startswith("/"):
+            new = "../" + new.lstrip("/")
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(
             f'<!doctype html><meta charset="utf-8"><title>Redirecting…</title>'
