@@ -1,2 +1,36 @@
 # ExperienceRLC
 We are a life-giving church located in Bowling Green Ky. Welcome Home.
+
+## Daily Bible Breakdown + SOAP site
+
+The home page (`index.html`) automatically shows **today's** Bible Breakdown reading
+(with links to BibleGateway) and **today's SOAP** devotion, based on the visitor's date.
+Readers can step back through previous days, and `archive.html` lists past SOAPs.
+
+### Adding content
+
+1. **Reading plan** — add a line per day to `data/reading-plan.json`:
+   ```json
+   "2026-11-22": { "passages": ["1 Peter 1", "Proverbs 22"] }
+   ```
+2. **SOAP** — create `data/soaps/YYYY-MM-DD.json` for that date:
+   ```json
+   {
+     "title": "Your devotion title",
+     "verseRef": "1 Peter 1:3",
+     "verse": "The key verse text...",
+     "scripture": "...",
+     "observation": "...",
+     "application": "...",
+     "prayer": "..."
+   }
+   ```
+   To start a new paragraph inside a field, type `\n\n` (JSON text has to stay on one line).
+
+Write entries ahead of time — each one appears on its date. Future dates
+never show early. A day with no SOAP shows "coming soon."
+
+Settings (author name, Bible version) are in `assets/config.js`.
+
+### Hosting
+Turn on GitHub Pages: repo **Settings → Pages → Deploy from branch → `gh-pages` / root**.

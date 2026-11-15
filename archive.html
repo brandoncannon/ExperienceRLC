@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bible Breakdown · Archive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="./">Experience <span>RLC</span></a>
+      <nav><a href="./">Today</a></nav>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="card" style="margin-top:28px">
+      <p class="eyebrow">Archive</p>
+      <h1 style="font-family:Lora,serif;margin:0 0 16px">Past SOAPs</h1>
+      <ul class="archive-list" id="list"><li>Loading…</li></ul>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="wrap"><p>Experience RLC · Bowling Green, KY · Welcome Home.</p></div></footer>
+  <script>
+    (function () {
+      const pad = (n) => String(n).padStart(2, "0");
+      const d = new Date();
+      const today = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+      const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+      // Look up each scheduled day up to today (newest first, last 120 days) and list the ones with a SOAP.
+      fetch("data/reading-plan.json", { cache: "no-cache" })
+        .then((r) => r.json())
+        .then((plan) => {
+          const dates = Object.keys(plan).filter((k) => k <= today).sort().reverse().slice(0, 120);
+          return Promise.all(dates.map((date) =>
+            fetch(`data/soaps/${date}.json`, { cache: "no-cache" })
+              .then((r) => (r.ok ? r.json() : null))
+              .then((s) => s && { date, title: s.title || "Daily SOAP", reading: [].concat(plan[date].passages || plan[date]).join(" · ") })
+              .catch(() => null)));
+        })
+        .then((items) => {
+          const past = items.filter(Boolean);
+          document.getElementById("list").innerHTML = past.length
+            ? past.map((i) => {
+                const [y, m, dd] = i.date.split("-").map(Number);
+                const when = new Date(y, m - 1, dd).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+                return `<li><a href="./?date=${i.date}">${esc(i.title)}</a><small>${when}${i.reading ? " · " + esc(i.reading) : ""}</small></li>`;
+              }).join("")
+            : "<li>No entries yet.</li>";
+        })
+        .catch(() => { document.getElementById("list").innerHTML = "<li>Archive unavailable.</li>"; });
+    })();
+  </script>
+</body>
+</html>

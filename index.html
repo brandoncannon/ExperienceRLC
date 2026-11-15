@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bible Breakdown · Daily SOAP</title>
+  <meta name="description" content="Today's Bible Breakdown reading and daily SOAP devotion from Experience RLC.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="./">Experience <span>RLC</span></a>
+      <nav><a href="archive.html">Archive</a></nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="day-nav">
+      <a id="prev" href="#" aria-label="Previous day">&larr; <span>Previous</span></a>
+      <p id="date" class="date"></p>
+      <a id="next" href="#" aria-label="Next day"><span>Next</span> &rarr;</a>
+    </div>
+
+    <section class="card reading">
+      <p class="eyebrow">Bible Breakdown · Today's Reading</p>
+      <h2 id="reading-title">Loading…</h2>
+      <div id="reading-links" class="reading-links"></div>
+    </section>
+
+    <article class="card devotion" id="devotion">
+      <p class="eyebrow">Daily SOAP</p>
+      <h1 id="soap-title"></h1>
+      <p class="byline" id="byline"></p>
+      <div id="soap-body"></div>
+    </article>
+
+    <p class="today-link" id="today-link" hidden><a href="./">Go to today &rarr;</a></p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Experience RLC · Bowling Green, KY · Welcome Home.</p>
+    </div>
+  </footer>
+
+  <script src="assets/config.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
