@@ -89,3 +89,19 @@ a { color: var(--accent); }
 .scripture-text .translation { font-family: "Inter", sans-serif; font-size: .8rem; color: var(--muted); margin: 10px 0 0; }
 .reading-links .note { font-size: .9rem; }
 .reading-links .note a { text-decoration: none; font-weight: 600; }
+
+/* NLT text from Tyndale's API */
+.scripture-text.nlt h3 { display: none; }
+.scripture-text.nlt h4, .scripture-text.nlt .subhead { font-family: "Inter", sans-serif; font-size: .85rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 18px 0 8px; }
+.scripture-text.nlt p { margin: 0 0 12px; }
+.scripture-text.nlt .vn { font-family: "Inter", sans-serif; font-size: .65em; font-weight: 600; color: var(--accent); vertical-align: super; line-height: 0; margin-right: 3px; }
+.scripture-text.nlt [class*="poet1"], .scripture-text.nlt [class*="poet2"], .scripture-text.nlt [class*="hanging"] { margin: 0; padding-left: 1.4em; text-indent: -1.4em; }
+.scripture-text.nlt [class*="poet2"] { padding-left: 2.6em; }
+.scripture-text.nlt [class*="-sp"] { margin-top: 12px; }
+.scripture-text.nlt .psa-title, .scripture-text.nlt .sos-speaker { font-style: italic; color: var(--muted); }
+.scripture-text.nlt .sc { font-variant: small-caps; }
+.scripture-text.nlt .a-tn { color: var(--accent); cursor: pointer; font-family: "Inter", sans-serif; font-size: .75em; vertical-align: super; padding: 0 2px; }
+.scripture-text.nlt .tn { display: none; }
+.scripture-text.nlt .tn.open { display: block; font-family: "Inter", sans-serif; font-size: .82rem; line-height: 1.5; color: var(--muted); background: var(--bg); border-radius: 8px; padding: 8px 10px; margin: 6px 0; text-indent: 0; }
+.scripture-text.nlt .tn-ref { font-weight: 600; margin-right: 4px; }
+.scripture-text .translation { line-height: 1.5; }

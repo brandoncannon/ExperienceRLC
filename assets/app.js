@@ -28,6 +28,36 @@
   else $("next").href = nextKey === todayKey ? "./" : `?date=${nextKey}`;
   if (key !== todayKey) { $("today-link").hidden = false; $("reading-label").textContent = "Bible Breakdown · Reading"; }
 
+  // ---- NLT text (Tyndale's NLT API: https://api.nlt.to) ----
+  const NLT_NOTICE =
+    "Scripture quotations are taken from the <i>Holy Bible</i>, New Living Translation, copyright &copy;1996, 2004, 2015 by Tyndale House Foundation. " +
+    "Used by permission of Tyndale House Publishers, Carol Stream, Illinois 60188. All rights reserved.";
+  const ALLOWED = new Set(["P", "SPAN", "EM", "I", "B", "STRONG", "H3", "H4", "BR", "SUP", "A", "SECTION", "VERSE_EXPORT"]);
+  const clean = (node) => {
+    [...node.children].forEach((el) => {
+      clean(el);
+      if (!ALLOWED.has(el.tagName)) { el.replaceWith(...el.childNodes); return; }
+      [...el.attributes].forEach((a) => { if (a.name !== "class") el.removeAttribute(a.name); });
+    });
+    return node;
+  };
+  const fetchNlt = (ref) =>
+    fetch(`https://api.nlt.to/api/passages?ref=${encodeURIComponent(ref)}&version=NLT&key=${encodeURIComponent(cfg.nltApiKey || "TEST")}`)
+      .then((r) => { if (!r.ok) throw new Error("nlt"); return r.text(); })
+      .then((t) => {
+        const doc = new DOMParser().parseFromString(t, "text/html");
+        const box = doc.querySelector("#bibletext");
+        if (!box || !box.querySelector(".vn")) throw new Error("nlt");
+        box.querySelectorAll("h2, script, style, link").forEach((el) => el.remove());
+        return clean(box).innerHTML;
+      });
+
+  // Tap a footnote marker (*) to show or hide the note.
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest(".a-tn");
+    if (a && a.nextElementSibling) a.nextElementSibling.classList.toggle("open");
+  });
+
   // ---- Reading plan ----
   fetch("data/reading-plan.json", { cache: "no-cache" })
     .then((r) => r.json())
@@ -48,15 +78,21 @@
         .map((p) => `<a href="${bibleUrl(p)}" target="_blank" rel="noopener">${esc(p)} in the ${esc(cfg.bibleVersion || "NET")} &#8599;</a>`)
         .join(" · ");
       $("reading-links").innerHTML = `<p class="note">Read in another translation: ${otherLinks}</p>`;
-      // Embedded chapter text (World English Bible, public domain), stored by month.
-      fetch(`data/bible/${key.slice(0, 7)}.json`, { cache: "no-cache" })
-        .then((r) => (r.ok ? r.json() : {}))
-        .then((month) => {
-          if (!month[key]) return;
-          $("scripture-text").innerHTML = month[key] + '<p class="translation">World English Bible (public domain)</p>';
-          $("scripture-text").hidden = false;
-        })
-        .catch(() => {});
+      // Chapter text on the page: NLT from Tyndale's API, falling back to the stored WEB text.
+      const showText = (htmlText, credit, cls) => {
+        $("scripture-text").innerHTML = htmlText + `<p class="translation">${credit}</p>`;
+        $("scripture-text").className = "scripture-text " + cls;
+        $("scripture-text").hidden = false;
+      };
+      const showWeb = () =>
+        fetch(`data/bible/${key.slice(0, 7)}.json`, { cache: "no-cache" })
+          .then((r) => (r.ok ? r.json() : {}))
+          .then((month) => { if (month[key]) showText(month[key], "World English Bible (public domain)", "web"); })
+          .catch(() => {});
+      if (!passages.length) return;
+      Promise.all(passages.map(fetchNlt))
+        .then((parts) => showText(parts.join(""), NLT_NOTICE, "nlt"))
+        .catch(showWeb);
     })
     .catch(() => { $("reading-title").textContent = "Reading plan unavailable."; });
 

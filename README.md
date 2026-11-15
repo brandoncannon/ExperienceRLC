@@ -14,8 +14,11 @@ Readers can step back through previous days, and `archive.html` lists past SOAPs
 - `data/soaps/` holds the SOAPs from cannonstudybible.com, one file per month, keyed by date.
   Days whose chapter has no SOAP yet show "coming soon."
 
-- `data/bible/` holds each day's chapter text from the World English Bible (public domain),
-  one file per month, so readers can read the chapter without leaving the page.
+- The chapter text on the page is the **NLT**, loaded live from Tyndale's NLT API (https://api.nlt.to).
+  It works with the anonymous `TEST` key; for a full key, sign up at api.nlt.to and put it in
+  `assets/config.js` as `nltApiKey`.
+- `data/bible/` holds the World English Bible (public domain) for each day as a backup,
+  shown only if the NLT can't be loaded.
 
 ### Adding content
 
