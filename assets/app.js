@@ -44,9 +44,19 @@
       }
       const passages = Array.isArray(day) ? day : day.passages || [];
       $("reading-title").textContent = (day.title) || passages.join(" · ");
-      $("reading-links").innerHTML = passages
-        .map((p) => `<a class="btn" href="${bibleUrl(p)}" target="_blank" rel="noopener">Read ${esc(p)}</a>`)
-        .join("");
+      const otherLinks = passages
+        .map((p) => `<a href="${bibleUrl(p)}" target="_blank" rel="noopener">${esc(p)} in the ${esc(cfg.bibleVersion || "NET")} &#8599;</a>`)
+        .join(" · ");
+      $("reading-links").innerHTML = `<p class="note">Read in another translation: ${otherLinks}</p>`;
+      // Embedded chapter text (World English Bible, public domain), stored by month.
+      fetch(`data/bible/${key.slice(0, 7)}.json`, { cache: "no-cache" })
+        .then((r) => (r.ok ? r.json() : {}))
+        .then((month) => {
+          if (!month[key]) return;
+          $("scripture-text").innerHTML = month[key] + '<p class="translation">World English Bible (public domain)</p>';
+          $("scripture-text").hidden = false;
+        })
+        .catch(() => {});
     })
     .catch(() => { $("reading-title").textContent = "Reading plan unavailable."; });
 

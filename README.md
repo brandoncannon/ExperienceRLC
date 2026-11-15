@@ -14,6 +14,9 @@ Readers can step back through previous days, and `archive.html` lists past SOAPs
 - `data/soaps/` holds the SOAPs from cannonstudybible.com, one file per month, keyed by date.
   Days whose chapter has no SOAP yet show "coming soon."
 
+- `data/bible/` holds each day's chapter text from the World English Bible (public domain),
+  one file per month, so readers can read the chapter without leaving the page.
+
 ### Adding content
 
 1. **Reading plan** — add a line per day to `data/reading-plan.json`:
