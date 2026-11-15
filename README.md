@@ -7,6 +7,13 @@ The home page (`index.html`) automatically shows **today's** Bible Breakdown rea
 (with links to BibleGateway) and **today's SOAP** devotion, based on the visitor's date.
 Readers can step back through previous days, and `archive.html` lists past SOAPs.
 
+### Where the content comes from
+
+- `data/reading-plan.json` holds the 2026–2027 SOAP Bible Reading Plan (from the Google Docs),
+  one chapter per day with Catch-Up Days on the 15th and 30th.
+- `data/soaps/` holds the SOAPs from cannonstudybible.com, one file per plan date.
+  Days whose chapter has no SOAP yet show "coming soon."
+
 ### Adding content
 
 1. **Reading plan** — add a line per day to `data/reading-plan.json`:

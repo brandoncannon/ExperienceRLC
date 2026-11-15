@@ -33,6 +33,11 @@
     .then((r) => r.json())
     .then((plan) => {
       const day = plan[key];
+      if (day && day.title === "Catch-Up Day") {
+        $("reading-title").textContent = "Catch-Up Day";
+        $("reading-links").innerHTML = '<p class="note">No new chapter today. Use today to catch up on any readings you missed.</p>';
+        return;
+      }
       if (!day) {
         $("reading-title").textContent = "No reading scheduled for this day.";
         return;
@@ -67,13 +72,17 @@
       ];
       let html = "";
       if (s.verse) {
-        html += `<blockquote class="key-verse">${paras(s.verse)}${s.verseRef ? `<cite><a href="${bibleUrl(s.verseRef)}" target="_blank" rel="noopener">${esc(s.verseRef)}</a></cite>` : ""}</blockquote>`;
+        html += `<section class="soap-part"><h3><span class="letter">S</span>Scripture</h3><blockquote class="key-verse">${paras(s.verse)}${s.verseRef ? `<cite><a href="${bibleUrl(s.verseRef)}" target="_blank" rel="noopener">${esc(s.verseRef)}${s.version ? " (" + esc(s.version) + ")" : ""}</a></cite>` : ""}</blockquote></section>`;
       }
       html += sections
         .filter(([, , text]) => text)
         .map(([letter, label, text]) => `<section class="soap-part"><h3><span class="letter">${letter}</span>${label}</h3>${paras(text)}</section>`)
         .join("");
+      if (s.source) html += `<p class="source"><a href="${esc(s.source)}" target="_blank" rel="noopener">Read more on Cannon Study Bible &rarr;</a></p>`;
       $("soap-body").innerHTML = html;
     })
-    .catch(() => showEmpty("Today's SOAP is coming soon."));
+    .catch(() => {
+      const dom = fromKey(key).getDate();
+      showEmpty(dom === 15 || dom === 30 ? "Catch-up day — no new SOAP today." : "This day's SOAP is coming soon.");
+    });
 })();
