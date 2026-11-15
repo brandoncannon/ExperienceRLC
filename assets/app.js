@@ -110,6 +110,7 @@
     .then((month) => {
       const s = month[key];
       if (!s) throw new Error("missing");
+      if (s.verseRef) s.verseRef = s.verseRef.replace(/(\s|:)0+(\d)/g, "$1$2"); // "Psalm 122:01" -> "Psalm 122:1"
       $("soap-title").textContent = s.title || "Today's SOAP";
       $("byline").textContent = `by ${s.author || cfg.author || ""}`;
       const sections = [
@@ -128,6 +129,23 @@
         .join("");
       if (s.source) html += `<p class="source"><a href="${esc(s.source)}" target="_blank" rel="noopener">Read more on Cannon Study Bible &rarr;</a></p>`;
       $("soap-body").innerHTML = html;
+
+      // Show the SOAP's key verse in the NLT (keeps the original quote if the NLT can't load).
+      const quote = $("soap-body").querySelector(".key-verse");
+      if (quote && s.verseRef) {
+        fetchNlt(s.verseRef)
+          .then((h) => {
+            const box = document.createElement("div");
+            box.innerHTML = h;
+            box.querySelectorAll("h3, h4, .subhead, .psa-title, .sos-speaker, .tn, .a-tn").forEach((el) => el.remove());
+            const verses = box.querySelectorAll(".vn");
+            if (verses.length === 1) verses[0].remove();
+            const text = box.textContent.replace(/\s+/g, " ").trim();
+            if (!text) return;
+            quote.innerHTML = `<p>${esc(text)}</p><cite><a href="https://www.biblegateway.com/passage/?search=${encodeURIComponent(s.verseRef)}&version=NLT" target="_blank" rel="noopener">${esc(s.verseRef)} (NLT)</a></cite>`;
+          })
+          .catch(() => {});
+      }
     })
     .catch(() => {
       const dom = fromKey(key).getDate();
