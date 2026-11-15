@@ -5,5 +5,5 @@ window.SITE_CONFIG = {
   bibleVersion: "NET",
   // NLT API key from https://api.nlt.to (free sign-up). "TEST" works without signing up,
   // within Tyndale's anonymous limits (50 verses per request, 500 requests per day per reader).
-  nltApiKey: "TEST",
+  nltApiKey: "362e29ab-dee0-4f7d-81fd-70d730331494",
 };
