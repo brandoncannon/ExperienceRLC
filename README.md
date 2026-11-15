@@ -11,22 +11,22 @@ Readers can step back through previous days, and `archive.html` lists past SOAPs
 
 - `data/reading-plan.json` holds the 2026–2027 SOAP Bible Reading Plan (from the Google Docs),
   one chapter per day with Catch-Up Days on the 15th and 30th.
-- `data/soaps/` holds the SOAPs from cannonstudybible.com, one file per plan date.
+- `data/soaps/` holds the SOAPs from cannonstudybible.com, one file per month, keyed by date.
   Days whose chapter has no SOAP yet show "coming soon."
 
 ### Adding content
 
 1. **Reading plan** — add a line per day to `data/reading-plan.json`:
    ```json
-   "2026-11-22": { "passages": ["1 Peter 1", "Proverbs 22"] }
+   "2026-11-22": { "passages": ["Psalm 131"] }
    ```
-2. **SOAP** — create `data/soaps/YYYY-MM-DD.json` for that date:
+2. **SOAP** — add an entry keyed by date to that month's file, `data/soaps/YYYY-MM.json`:
    ```json
-   {
+   "2026-11-22": {
      "title": "Your devotion title",
      "verseRef": "1 Peter 1:3",
      "verse": "The key verse text...",
-     "scripture": "...",
+     "version": "NET",
      "observation": "...",
      "application": "...",
      "prayer": "..."

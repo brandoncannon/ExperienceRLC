@@ -26,7 +26,7 @@
   const nextKey = addDays(key, 1);
   if (nextKey > todayKey) $("next").classList.add("disabled");
   else $("next").href = nextKey === todayKey ? "./" : `?date=${nextKey}`;
-  if (key !== todayKey) $("today-link").hidden = false;
+  if (key !== todayKey) { $("today-link").hidden = false; $("reading-label").textContent = "Bible Breakdown · Reading"; }
 
   // ---- Reading plan ----
   fetch("data/reading-plan.json", { cache: "no-cache" })
@@ -59,9 +59,11 @@
 
   if (isFuture) return showEmpty("Check back that morning.");
 
-  fetch(`data/soaps/${key}.json`, { cache: "no-cache" })
+  fetch(`data/soaps/${key.slice(0, 7)}.json`, { cache: "no-cache" })
     .then((r) => { if (!r.ok) throw new Error("missing"); return r.json(); })
-    .then((s) => {
+    .then((month) => {
+      const s = month[key];
+      if (!s) throw new Error("missing");
       $("soap-title").textContent = s.title || "Today's SOAP";
       $("byline").textContent = `by ${s.author || cfg.author || ""}`;
       const sections = [
