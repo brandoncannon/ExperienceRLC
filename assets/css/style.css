@@ -682,3 +682,20 @@ html.lights-down .n-takeaway .n-chip, html.lights-down .n-bigidea .n-chip { back
 .n-hero.has-art .n-meta { color: var(--s-fg, #fff); opacity: .8; }
 .has-theme .n-num { background: var(--s-bg); color: var(--s-fg); }
 html.lights-down .n-hero.has-art { background: var(--s-bg); }
+/* Series graphic as the header background (Banner: in the notes file) */
+.n-hero.has-banner { padding-top: 0; }
+.n-hero.has-banner::after { display: none; }
+.n-banner { display: block; width: min(900px, 100%); height: auto; margin: 0 auto; position: relative; z-index: 0; }
+/* Pull the title up into the empty lower part of the graphic. */
+.n-hero.has-banner .wrap-narrow { margin-top: calc(min(900px, 100%) * -0.13); }
+.n-hero.has-banner .wrap-narrow { position: relative; z-index: 1; }
+.n-hero.has-banner .n-art { display: none; }
+.n-hero.has-banner > .n-banner { margin-top: 0; }
+@media (max-width: 700px) {
+  .n-banner { width: 150%; max-width: none; margin-left: -25%; }
+  .n-hero.has-banner .wrap-narrow { margin-top: -22.5%; }
+}
+/* Trim the graphic's empty top and bottom (the logo sits in the middle). */
+.n-banner { aspect-ratio: 1664 / 620; object-fit: cover; }
+.n-hero.has-banner .wrap-narrow { margin-top: calc(min(900px, 100%) * -0.1); }
+@media (max-width: 700px) { .n-hero.has-banner .wrap-narrow { margin-top: -12%; } }

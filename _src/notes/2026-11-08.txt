@@ -3,6 +3,7 @@ Title: Transforming Power
 Date: 2026-11-08
 Speaker: Pastor Brandon Cannon
 Art: the-mission-logo.jpg
+Banner: the-mission.jpg
 Colors: #284436, #c9bfb3
 
 The greatest story ever told is the [mission] of God to [rescue all of us].
