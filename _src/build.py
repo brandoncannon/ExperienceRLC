@@ -52,6 +52,7 @@ NAV = [
     ("Next Steps", [
         ("Next Steps", "/next-steps/"),
         ("Water Baptism", "/water-baptism/"),
+        ("Daily Reading & SOAP", "/daily/"),
         ("The Bible", "/the-bible/"),
         ("LifeGroups", "/life-groups/"),
         ("RLC Connect", "/rlcconnect/"),
@@ -287,7 +288,7 @@ def relativize(html, depth):
 
 
 def build():
-    pages = sorted((SRC / "pages").glob("*.html"))
+    pages = sorted((SRC / "pages").rglob("*.html"))
     for page in pages:
         raw = page.read_text(encoding="utf-8")
         meta = dict(re.findall(r"<!--\s*(\w+):\s*(.*?)\s*-->", raw[:600]))
@@ -296,7 +297,7 @@ def build():
         body = re.sub(r"\{\{link:(\w+)\}\}", lambda m: LINKS[m.group(1)], body)
         body = re.sub(r"\{\{icon:(\w+)\}\}", lambda m: ICONS[m.group(1)], body)
         body = body.replace("{{socials}}", socials())
-        slug = page.stem
+        slug = page.relative_to(SRC / "pages").with_suffix("").as_posix()
         path = "/" if slug == "index" else f"/{slug}/"
         title = meta.get("title", SITE_NAME)
         full_title = SITE_NAME + " | Bowling Green, KY" if slug == "index" else f"{title} | {SITE_NAME}"
@@ -332,7 +333,8 @@ def build():
         print("built", out.relative_to(ROOT))
 
     # Sitemap for search engines.
-    urls = ["/" if pg.stem == "index" else f"/{pg.stem}/" for pg in pages if pg.stem != "404"]
+    slugs = [pg.relative_to(SRC / "pages").with_suffix("").as_posix() for pg in pages]
+    urls = ["/" if sl == "index" else f"/{sl}/" for sl in slugs if sl != "404"]
     (ROOT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + "".join(f"  <url><loc>{SITE_URL}{u}</loc><lastmod>{date.today().isoformat()}</lastmod></url>\n" for u in urls)
