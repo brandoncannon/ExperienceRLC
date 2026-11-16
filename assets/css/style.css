@@ -467,3 +467,32 @@ blockquote cite, .verse cite { display: block; margin-top: .5em; font-style: nor
 .archive-list small { display: block; color: var(--muted); margin-top: 2px; }
 .media-links { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: -4px 0 22px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
 .media-links .episode-title { flex-basis: 100%; margin: 2px 0 0; color: var(--muted); font-size: .92rem; }
+/* Your Turn: reader's own SOAP */
+.my-soap { border-top: 4px solid var(--accent); }
+.my-soap form { margin-top: 18px; display: grid; gap: 18px; }
+.soap-field { display: grid; gap: 6px; }
+.soap-label { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--ink); font-size: 1.05rem; }
+.soap-field small { color: var(--muted); font-size: .92rem; }
+.soap-field textarea, .soap-field input {
+  width: 100%; font: inherit; font-size: 1rem; color: var(--text);
+  padding: 12px 14px; border: 1px solid #cfd6da; border-radius: 10px; background: #fff;
+  resize: vertical;
+}
+.soap-field textarea:focus, .soap-field input:focus { outline: 3px solid var(--accent-pale); border-color: var(--accent-deep); }
+.btn-link { background: none; border: 0; color: var(--muted); padding: .95em .6em; text-decoration: underline; }
+.btn-link:hover { color: var(--ink); transform: none; }
+.my-soap-status { min-height: 1.4em; }
+/* Phones keep :hover after a tap; don't leave outline buttons looking pressed. */
+@media (hover: none) {
+  .btn-outline:hover { background: transparent; color: var(--ink); border-color: currentColor; }
+  .btn:hover { transform: none; }
+}
+/* "Go deeper" link to the day's Bible Breakdown blog post */
+.blog-link { display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; background: var(--tint); border-radius: var(--radius); padding: 22px clamp(22px, 4vw, 40px); margin-bottom: 24px; }
+.blog-link .eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; margin-bottom: 4px; }
+.blog-link-title { margin: 0; font-family: "Lora", Georgia, serif; font-size: 1.2rem; font-weight: 600; color: var(--ink); }
+/* Events card and full-width "Take your next step" banner on the homepage */
+.grad-card.dusk { background: linear-gradient(115deg, rgba(21, 60, 93, .94) 0%, rgba(63, 88, 102, .86) 55%, rgba(21, 60, 93, .9) 100%), url("../img/cafe.jpg") center / cover; }
+.statement-card.wide { grid-column: 1 / -1; min-height: 0; padding: clamp(28px, 4vw, 44px) clamp(28px, 4vw, 48px); justify-content: space-between; }
+.statement-card.wide span br { display: none; }
+.statement-card.wide::after { content: "→"; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; color: var(--ink); }

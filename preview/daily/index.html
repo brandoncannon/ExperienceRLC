@@ -111,6 +111,42 @@
       <div id="soap-body"></div>
     </article>
 
+    <aside class="blog-link" id="blog-link" hidden>
+      <div>
+        <p class="eyebrow">Go deeper</p>
+        <p class="blog-link-title" id="blog-link-title">The Bible Breakdown blog</p>
+      </div>
+      <a class="btn btn-dark" id="blog-link-btn" href="https://www.thebiblebreakdown.com/" target="_blank" rel="noopener">Read the blog post &rarr;</a>
+    </aside>
+
+    <section class="daily-card my-soap" id="my-soap" aria-labelledby="my-soap-title">
+      <p class="eyebrow">Your Turn</p>
+      <h2 id="my-soap-title" class="soap-title">Write your own SOAP</h2>
+      <p class="note">Read the chapter, then write what God is showing you. Your entry saves on this device only. Nothing is sent to the church.</p>
+      <form id="my-soap-form" novalidate>
+        <label class="soap-field"><span class="soap-label"><span class="letter">S</span>Scripture</span>
+          <small>Write out a verse from today's reading that stood out to you.</small>
+          <textarea name="s" rows="3"></textarea></label>
+        <label class="soap-field"><span class="soap-label"><span class="letter">O</span>Observation</span>
+          <small>What do you think God is saying in this verse?</small>
+          <textarea name="o" rows="4"></textarea></label>
+        <label class="soap-field"><span class="soap-label"><span class="letter">A</span>Application</span>
+          <small>How does it apply to your life today?</small>
+          <textarea name="a" rows="4"></textarea></label>
+        <label class="soap-field"><span class="soap-label"><span class="letter">P</span>Prayer</span>
+          <small>Write a short prayer asking God to help you live it out.</small>
+          <textarea name="p" rows="3"></textarea></label>
+        <label class="soap-field"><span class="soap-label">Your email</span>
+          <input type="email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com"></label>
+        <div class="btn-row">
+          <button class="btn btn-dark" type="submit">Email it to me</button>
+          <button class="btn btn-outline" type="button" id="my-soap-copy">Copy</button>
+          <button class="btn btn-link" type="button" id="my-soap-clear">Clear</button>
+        </div>
+        <p class="note my-soap-status" id="my-soap-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
     <p class="today-link" id="today-link" hidden><a class="btn btn-dark" href="../daily/index.html">Go to today &rarr;</a></p>
 
     <div class="text-band" style="margin-top:40px">
@@ -128,6 +164,7 @@
 
 <script src="../../assets/js/daily-config.js"></script>
 <script src="../../assets/js/daily.js"></script>
+<script src="../../assets/js/my-soap.js"></script>
 </main>
 <footer class="site-footer">
   <div class="wrap">

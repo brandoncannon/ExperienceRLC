@@ -47,5 +47,5 @@ Page addresses match the old WordPress site (`/new-here/`, `/leadership/`, `/kid
   ```
   Use `\n\n` for a new paragraph inside a field. A date without an entry shows "coming soon"; future dates never show early.
 - **Backup Bible text:** `daily/data/bible/` (World English Bible, public domain), used only if the NLT can't load.
-- **Podcast & YouTube links:** `daily/data/media.json`, filled in automatically three times a day by the GitHub Action in `.github/workflows/update-media.yml` (it runs `_src/update_media.py`). It matches each day's chapter to the episode/video whose title starts with that chapter. To run it right away: GitHub → **Actions** → *Update daily podcast & video links* → **Run workflow**.
+- **Podcast, YouTube & blog links:** `daily/data/media.json`, filled in automatically three times a day by the GitHub Action in `.github/workflows/update-media.yml` (it runs `_src/update_media.py`). It matches each day's chapter to the episode/video whose title starts with that chapter. To run it right away: GitHub → **Actions** → *Update daily podcast & video links* → **Run workflow**.
 - **Settings:** `assets/js/daily-config.js` (author name, NLT API key, translation for the "read in another translation" link).
