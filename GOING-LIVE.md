@@ -1,6 +1,6 @@
 # Moving experiencerlc.com from WordPress to this site
 
-Your domain stays at GoDaddy. The website moves to GitHub Pages (free, with free HTTPS). Every change pushed to the `main` branch goes live within a few minutes.
+Your domain stays at GoDaddy. The website moves to GitHub Pages (free, with free HTTPS). Every change pushed to the `gh-pages` branch goes live within a few minutes.
 
 ## Before you start
 
@@ -28,8 +28,8 @@ Email (pastor@, info@ and every other @experiencerlc.com address) runs on **Micr
 
 ## The switch (about 30 minutes plus waiting)
 
-1. **Merge the site into `main`.** Merge the `claude/experiencerlc-redesign-7be62v` branch into `main` (it already includes the `CNAME` file that tells GitHub the site's address).
-2. **Turn on GitHub Pages.** Repository **Settings → Pages** → Source: *Deploy from a branch* → Branch: `main`, folder `/ (root)` → **Save**. Under **Custom domain**, enter `www.experiencerlc.com` and save.
+1. **Merge the site into `gh-pages`.** Merge the `claude/experiencerlc-redesign-7be62v` branch into `gh-pages` (it already includes the `CNAME` file that tells GitHub the site's address).
+2. **Turn on GitHub Pages.** Repository **Settings → Pages** → Source: *Deploy from a branch* → Branch: `gh-pages`, folder `/ (root)` → **Save**. Under **Custom domain**, enter `www.experiencerlc.com` and save.
 3. **Point the domain at GitHub.** In GoDaddy **DNS**, change only these records:
 
    | Type  | Name  | Value                     |
@@ -47,7 +47,15 @@ Email (pastor@, info@ and every other @experiencerlc.com address) runs on **Micr
 
 ## After it's live: get found on Google
 
-1. **Google Search Console** (free): go to search.google.com/search-console, add the **Domain** `experiencerlc.com`, and verify it with the TXT record it gives you (add it in GoDaddy DNS). Then go to **Sitemaps** and submit `sitemap.xml`. Do the same at **Bing Webmaster Tools** (it can import from Google).
+1. **Google Search Console** (free). Do this 1–2 days after the new site is showing at experiencerlc.com.
+   1. On a computer, go to **search.google.com/search-console** and sign in with the Google account used before (the domain already has Google verification records, so the property probably exists).
+   2. Click the property picker at the top left. Pick **experiencerlc.com** (or **https://www.experiencerlc.com/** if that's what's listed).
+      - If nothing is listed, someone else owns it. Click **Add property**, choose **Domain**, type `experiencerlc.com`, and Google shows a TXT record. Add it in GoDaddy DNS as a new **TXT** record with name **@** (don't delete the existing ones), wait a few minutes, then click **Verify**.
+   3. In the left menu, click **Sitemaps**.
+   4. Under **Add a new sitemap**, type `sitemap.xml` and click **Submit**.
+   5. It should say **Success** (it can take a day). If an old WordPress sitemap is listed (e.g. `wp-sitemap.xml`), click it, then the **⋮** menu → **Remove sitemap**.
+   6. Optional: in **URL inspection** at the top, paste `https://www.experiencerlc.com/` and click **Request indexing** to nudge Google sooner.
+   - **Bing Webmaster Tools** (bing.com/webmasters): sign in and choose **Import from Google Search Console**. It copies everything over.
 2. **Google Business Profile**: claim or update the church's listing at business.google.com. Use exactly the same name, address and phone number as the website: *Real Life Church, 2714 Scottsville Road, Bowling Green, KY 42104, (270) 681-5298*. Add service times, photos and the website link. This is the biggest factor for showing up when people nearby search "church in Bowling Green."
 3. **Keep the hosting plan about a month**, then cancel it once email is confirmed safe (see "Before you start"). Keep the **domain** registration; don't cancel that.
 
