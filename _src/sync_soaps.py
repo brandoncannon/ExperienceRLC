@@ -15,6 +15,7 @@ in Obsidian flows through. Past days are never overwritten.
 """
 import json
 import re
+import time
 import sys
 import urllib.parse
 import urllib.request
@@ -41,6 +42,9 @@ def chapter_key(text):
 
 
 def get(url):
+    # Cache-buster: Obsidian's CDN can keep serving an old "Not Found" for a
+    # note that was published after someone first asked for it.
+    url += ("&" if "?" in url else "?") + f"v={int(time.time())}"
     req = urllib.request.Request(url, headers={"User-Agent": "experiencerlc-daily-sync"})
     with urllib.request.urlopen(req, timeout=30) as r:
         return r.read().decode("utf-8")
@@ -151,7 +155,10 @@ def main():
         except Exception as e:
             print(f"{day} {chapter}: could not read {path}: {e}")
             continue
-        if not entry or entry == existing:
+        if not entry:
+            print(f"{day} {chapter}: {path} is not a finished SOAP yet")
+            continue
+        if entry == existing:
             continue
         months[month][day] = entry
         changed.add(month)
