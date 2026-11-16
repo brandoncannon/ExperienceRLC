@@ -659,3 +659,12 @@ html.lights-down .site-footer, html.lights-down .site-footer a { color: var(--te
 html.lights-down .n-note-input { background-color: #0f2233; }
 html.lights-down .blank-input { color: var(--ink); }
 .n-intro > .n-bigidea { margin: 8px 0 22px; }
+/* Blanks as a written line, like the paper handout */
+.blank-input {
+  background: transparent; border: 0; border-bottom: 2px solid var(--ink); border-radius: 0;
+  box-shadow: none; padding: .05em .2em 0; margin: 0 .1em; color: var(--accent-deep);
+}
+.blank-input:focus { background: transparent; outline: none; border-bottom: 3px solid var(--accent-deep); }
+.blank.right .blank-input { border: 0; border-bottom: 2px solid var(--n-right); color: var(--n-right); }
+.blank.revealed .blank-input { border: 0; border-bottom: 2px solid var(--muted); color: var(--muted); }
+.n-takeaway .blank-input, .n-bigidea .blank-input { background: transparent; }
