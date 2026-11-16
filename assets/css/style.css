@@ -741,3 +741,10 @@ html.lights-down .n-hero.has-art { background: var(--s-bg); }
 .guide-card h3 { margin: 0 0 6px; font-size: 1.2rem; }
 .guide-card p { margin: 0 0 12px; color: var(--text); }
 @media (max-width: 520px) { .guide-card { grid-template-columns: 1fr; } .guide-card img { width: 100%; height: auto; aspect-ratio: 16 / 9; } }
+.guide-link.feature { background: var(--accent); border-color: var(--accent); }
+.guide-link.feature small { color: #24465f; }
+.guide-link.feature svg { color: var(--ink); }
+.guide-link.feature:hover { background: #b8dade; border-color: #b8dade; }
+.guide-links { margin-top: -28px; position: relative; }
+.blog-link-note { flex-basis: 100%; margin: -4px 0 0; color: var(--muted); font-size: .92rem; }
+.blog-link .btn svg { width: 18px; height: 18px; }

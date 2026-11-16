@@ -1,5 +1,5 @@
-# Worship Guide announcements
-# Shown at /worship-guide/ in this order. Lines starting with "#" are ignored.
+# Worship Guide "Get Connected" cards
+# Shown at /worship-guide/ in this order. Keep these year-round so the page never needs weekly updates. Lines starting with "#" are ignored.
 # Each announcement starts with "## Title", then a line or two of text,
 # then an optional button:  Link: Button text | https://...
 # Add a picture with:  Image: filename.jpg   (put the file in assets/img/)

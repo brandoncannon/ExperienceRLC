@@ -34,6 +34,7 @@ LINKS = {
     "youtube": "https://www.youtube.com/myreallifechurch",
     "podcast": "https://itunes.apple.com/us/podcast/real-life-church-real-life/id747574962",
     "bible_podcast": "https://thebiblebreakdown.buzzsprout.com/share",
+    "bb_facebook": "https://www.facebook.com/thebiblebreakdown",
     "blog": "https://brandoncannon.com",
     "text_alerts": "sms:94000?&body=reallife",
     "counseling_form": "https://forms.gle/Je6UF3yQepL8sQFy9",
@@ -288,26 +289,8 @@ def relativize(html, depth):
 
 
 def worship_guide_parts():
-    """{{latest_message}} and {{announcements}} for the Worship Guide page."""
-    import build_notes
-    out = {"latest_message": "", "announcements": ""}
-    files = sorted(build_notes.NOTES.glob("[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].txt"), reverse=True)
-    if files:
-        m = build_notes.parse(files[0])["meta"]
-        esc = html_escape
-        pic = m.get("banner") or m.get("art")  # the wide series graphic reads best here
-        art = f'<img src="/assets/img/series/{esc(pic)}" alt="{esc(m.get("series", ""))}" loading="lazy">' if pic else ""
-        series = " · ".join(x for x in (m.get("series", ""), f'Part {m["part"]}' if m.get("part") else "") if x)
-        out["latest_message"] = f"""    <a class="guide-message" href="/notes/">
-      {art}
-      <span class="guide-message-text">
-        <span class="eyebrow">This Week's Message</span>
-        <strong>{esc(m.get("title", "Message Notes"))}</strong>
-        <small>{esc(series)}{" · " if series and m.get("speaker") else ""}{esc(m.get("speaker", ""))}</small>
-        <span class="btn btn-accent btn-sm">Open Message Notes {ICONS["arrow"]}</span>
-      </span>
-    </a>
-"""
+    """{{announcements}} ("Get Connected" cards) for the Worship Guide page."""
+    out = {"announcements": ""}
     src = SRC / "worship-guide" / "announcements.txt"
     items, cur = [], None
     for line in (src.read_text(encoding="utf-8").splitlines() if src.exists() else []):
@@ -354,7 +337,7 @@ def build():
         body = re.sub(r"\{\{link:(\w+)\}\}", lambda m: LINKS[m.group(1)], body)
         body = re.sub(r"\{\{icon:(\w+)\}\}", lambda m: ICONS[m.group(1)], body)
         body = body.replace("{{socials}}", socials())
-        if "{{latest_message}}" in body or "{{announcements}}" in body:
+        if "{{announcements}}" in body:
             for k, v in worship_guide_parts().items():
                 body = body.replace("{{" + k + "}}", v)
         path = "/" if slug == "index" else f"/{slug}/"

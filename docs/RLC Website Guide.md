@@ -73,8 +73,8 @@ These change often, so they live in other tools, and the website just links to t
 
 - **Address:** https://www.experiencerlc.com/worship-guide/ (put this in Linktree). The old `/weekly-guide/` address forwards here.
 - **Unlisted:** not in the menu or Google, the same as Message Notes. People reach it from Linktree, a QR code, or the app.
-- **This Week's Message card** updates on its own: it shows the newest Message Notes (series graphic, title, speaker) and links to them.
-- **Announcements** live in `_src/worship-guide/announcements.txt`. Each one is `## Title`, a line of text, and an optional `Link: Button text | https://...`. Easiest: tell Claude "Update the worship guide announcements: …" and paste them in.
+- **Evergreen:** nothing on it needs weekly updates. The **Message Notes** button always opens the newest notes.
+- **Get Connected** cards (year-round, not weekly) live in `_src/worship-guide/announcements.txt`. Each one is `## Title`, a line of text, and an optional `Link: Button text | https://...`. Easiest: tell Claude "Update the worship guide Get Connected cards: …" and paste them in.
 - **Buttons** (Connect Card, Give, Prayer Request, Events, Daily Reading, Watch Live, App) stay the same every week.
 
 ## Daily Reading & SOAP
@@ -84,6 +84,7 @@ These change often, so they live in other tools, and the website just links to t
 - **SOAPs:** `daily/data/soaps/YYYY-MM.json` (one file per month, one entry per date)
 - A date with no SOAP shows "coming soon." Future SOAPs never show early, so you can load them ahead.
 - **Your Turn:** under each SOAP, readers can write their own SOAP. It autosaves on their device (never sent to the church), and **Email it to me** opens their own email app with the entry ready to send; **Copy** pastes it anywhere.
+- **Join the discussion:** button in the Go deeper box that opens The Bible Breakdown Facebook page (facebook.com/thebiblebreakdown), where the daily question is posted.
 - **Go deeper:** a link to that day's post on thebiblebreakdown.com, found the same way (posts whose title starts with the chapter). Re-run chapters with no new post link to that chapter's most recent post.
 - **Listen / Watch buttons:** each day links to that day's Bible Breakdown podcast episode and YouTube video. A GitHub job finds new episodes automatically (about 5 AM, noon and 6 PM Central). Nothing to do; if an episode is posted with a title that doesn't start with the chapter (e.g. "Psalm 125: …"), it won't be matched, and the button falls back to the podcast page / a YouTube search. To check right away: GitHub → **Actions** → *Update daily podcast & video links* → **Run workflow**.
 - **NLT API key:** `assets/js/daily-config.js` (from api.nlt.to). It's meant to be public.

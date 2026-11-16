@@ -1,18 +1,18 @@
 <!-- title: Worship Guide -->
-<!-- description: This week's worship guide from Real Life Church: message notes, connect card, giving, prayer requests, announcements and events. -->
+<!-- description: Real Life Church worship guide: message notes, connect card, giving, prayer requests, events and ways to get connected. -->
 
 <section class="guide-hero">
   <div class="wrap-narrow">
     <span class="eyebrow">Worship Guide</span>
     <h1>Welcome Home</h1>
-    <p class="guide-date" id="guide-date">Real Life Church · Bowling Green, KY</p>
+    <p class="guide-date">Sundays at 9:15am &amp; 11:00am</p>
   </div>
 </section>
 
 <section class="section-tight guide">
   <div class="wrap-narrow">
-{{latest_message}}
     <nav class="guide-links" aria-label="Worship guide links">
+      <a class="guide-link feature" href="/notes/"><span><strong>Message Notes</strong><small>Follow along with this week's message, fill in the blanks, and save your notes.</small></span>{{icon:arrow}}</a>
       <a class="guide-link primary" href="{{link:connect_card}}" target="_blank" rel="noopener"><span><strong>Connect Card</strong><small>New here? Let us know you came. We'd love to meet you.</small></span>{{icon:arrow}}</a>
       <a class="guide-link" href="{{link:give}}" target="_blank" rel="noopener"><span><strong>Give</strong><small>Give online. Thank you for your generosity.</small></span>{{icon:arrow}}</a>
       <a class="guide-link" href="{{link:connect_card}}" target="_blank" rel="noopener"><span><strong>Prayer Request</strong><small>Our team would love to pray for you.</small></span>{{icon:arrow}}</a>
@@ -22,7 +22,7 @@
       <a class="guide-link" href="{{link:app}}" target="_blank" rel="noopener"><span><strong>Get the RLC App</strong><small>Notes, videos, and more on the go.</small></span>{{icon:arrow}}</a>
     </nav>
 
-    <h2 class="guide-heading">Announcements</h2>
+    <h2 class="guide-heading">Get Connected</h2>
 {{announcements}}
 
     <h2 class="guide-heading">This Week at RLC</h2>
@@ -43,12 +43,3 @@
   </div>
 </section>
 
-<script>
-  // Show this week's Sunday (today on Sundays, otherwise the coming Sunday).
-  (function () {
-    var d = new Date();
-    d.setDate(d.getDate() + ((7 - d.getDay()) % 7));
-    var el = document.getElementById("guide-date");
-    if (el) el.textContent = d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
-  })();
-</script>
