@@ -219,7 +219,7 @@ LAYOUT = """<!doctype html>
 <meta property="og:image" content="{og_image}">
 <meta name="twitter:card" content="summary_large_image">
 {robots}{ld}
-<meta name="theme-color" content="#1e2528">
+<meta name="theme-color" content="#153c5d">
 <link rel="icon" href="/assets/img/favicon.png" sizes="32x32">
 <link rel="icon" href="/assets/img/icon-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
