@@ -1,0 +1,5 @@
+# GitHub Pages settings: keep notes and the test copy off the live site.
+exclude:
+  - README.md
+  - GOING-LIVE.md
+  - preview

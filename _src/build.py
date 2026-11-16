@@ -11,7 +11,9 @@ new-here.html -> /new-here/index.html (so URLs match the old WordPress site).
 
 Run:  python3 _src/build.py
 """
+import json
 import re
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -137,6 +139,70 @@ def socials(cls=""):
     return f'<ul class="socials {cls}">{lis}</ul>'
 
 
+CHURCH_LD = {
+    "@type": "Church",
+    "@id": SITE_URL + "/#church",
+    "name": SITE_NAME,
+    "alternateName": "RLC",
+    "url": SITE_URL + "/",
+    "logo": SITE_URL + "/assets/img/logo.png",
+    "image": SITE_URL + "/assets/img/worship-stage.jpg",
+    "description": "A life-giving church in Bowling Green, Kentucky that exists to make disciples by knowing God, growing in freedom, and sharing Christ in everyday life.",
+    "telephone": "+1-270-681-5298",
+    "email": "info@experiencerlc.com",
+    "foundingDate": "2012-02-05",
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "2714 Scottsville Road",
+        "addressLocality": "Bowling Green",
+        "addressRegion": "KY",
+        "postalCode": "42104",
+        "addressCountry": "US",
+    },
+    "openingHoursSpecification": [
+        {"@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "09:15", "closes": "12:30"},
+    ],
+    "sameAs": [LINKS["facebook"], LINKS["instagram"], LINKS["youtube"]],
+}
+
+
+def page_section(path):
+    """The menu section a page sits under, e.g. ("About", "/about-us/")."""
+    for label, target in NAV:
+        if isinstance(target, list) and any(h == path for _, h in target):
+            first_local = next((h for _, h in target if h.startswith("/")), None)
+            return label, first_local
+    return None
+
+
+def structured_data(path, title):
+    graph = [CHURCH_LD]
+    if path == "/":
+        graph.append({
+            "@type": "WebSite",
+            "@id": SITE_URL + "/#website",
+            "name": SITE_NAME,
+            "alternateName": ["RLC", "Experience RLC"],
+            "url": SITE_URL + "/",
+            "publisher": {"@id": SITE_URL + "/#church"},
+        })
+    else:
+        crumbs = [("Home", "/")]
+        sec = page_section(path)
+        if sec and sec[1] and sec[1] != path:
+            crumbs.append(sec)
+        crumbs.append((title, path))
+        graph.append({
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": i + 1, "name": n, "item": SITE_URL + u}
+                for i, (n, u) in enumerate(crumbs)
+            ],
+        })
+    data = {"@context": "https://schema.org", "@graph": graph}
+    return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False) + "</script>"
+
+
 LAYOUT = """<!doctype html>
 <html lang="en">
 <head>
@@ -150,7 +216,9 @@ LAYOUT = """<!doctype html>
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{description}">
 <meta property="og:url" content="{canonical}">
-<meta property="og:image" content="{site_url}/assets/img/baptism.jpg">
+<meta property="og:image" content="{og_image}">
+<meta name="twitter:card" content="summary_large_image">
+{robots}{ld}
 <meta name="theme-color" content="#1e2528">
 <link rel="icon" href="/assets/img/favicon.png" sizes="32x32">
 <link rel="icon" href="/assets/img/icon-192.png" sizes="192x192">
@@ -232,6 +300,8 @@ def build():
         path = "/" if slug == "index" else f"/{slug}/"
         title = meta.get("title", SITE_NAME)
         full_title = SITE_NAME + " | Bowling Green, KY" if slug == "index" else f"{title} | {SITE_NAME}"
+        hero = re.search(r'class="hero-media"><img src="/(assets/img/[^"]+)"', body)
+        og_image = f"{SITE_URL}/{hero.group(1) if hero else 'assets/img/worship-stage.jpg'}"
         html = LAYOUT.format(
             title=full_title,
             description=meta.get("description", ""),
@@ -239,6 +309,9 @@ def build():
             site=SITE_NAME,
             site_url=SITE_URL,
             head_extra=meta.get("head", ""),
+            og_image=og_image,
+            robots='<meta name="robots" content="noindex">\n' if slug == "404" else "",
+            ld="" if slug == "404" else structured_data(path, title),
             nav=render_nav(path),
             give=link_attrs(LINKS["give"]),
             menu_icon=ICONS["menu"],
@@ -251,7 +324,9 @@ def build():
             out = ROOT / f"{slug}.html"
         else:
             out = ROOT / slug / "index.html"
-        html = relativize(html, len(out.relative_to(ROOT).parts) - 1)
+        # The 404 page is shown at any address, so it keeps site-root links.
+        if slug != "404":
+            html = relativize(html, len(out.relative_to(ROOT).parts) - 1)
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(html, encoding="utf-8")
         print("built", out.relative_to(ROOT))
@@ -260,11 +335,11 @@ def build():
     urls = ["/" if pg.stem == "index" else f"/{pg.stem}/" for pg in pages if pg.stem != "404"]
     (ROOT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        + "".join(f"  <url><loc>{SITE_URL}{u}</loc></url>\n" for u in urls)
+        + "".join(f"  <url><loc>{SITE_URL}{u}</loc><lastmod>{date.today().isoformat()}</lastmod></url>\n" for u in urls)
         + "</urlset>\n",
         encoding="utf-8",
     )
-    (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n", encoding="utf-8")
+    (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nDisallow: /preview/\nDisallow: /_src/\nSitemap: {SITE_URL}/sitemap.xml\n", encoding="utf-8")
 
     # Old WordPress URLs that moved.
     redirects = {
@@ -274,12 +349,13 @@ def build():
     }
     for old, new in redirects.items():
         out = ROOT / old / "index.html"
+        canonical = SITE_URL + new if new.startswith("/") else new
         if new.startswith("/"):
             new = "../" + new.lstrip("/")
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(
-            f'<!doctype html><meta charset="utf-8"><title>Redirecting…</title>'
-            f'<meta http-equiv="refresh" content="0; url={new}"><link rel="canonical" href="{new}">'
+            f'<!doctype html><meta charset="utf-8"><title>Redirecting…</title><meta name="robots" content="noindex">'
+            f'<meta http-equiv="refresh" content="0; url={new}"><link rel="canonical" href="{canonical}">'
             f'<a href="{new}">Continue</a>\n',
             encoding="utf-8",
         )
@@ -288,3 +364,5 @@ def build():
 
 if __name__ == "__main__":
     build()
+    # Keep the preview/ copy (for raw.githack.com test links) in sync.
+    import make_preview  # noqa: E402,F401  (runs on import)
