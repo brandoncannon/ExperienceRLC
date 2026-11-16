@@ -487,3 +487,7 @@ blockquote cite, .verse cite { display: block; margin-top: .5em; font-style: nor
   .btn-outline:hover { background: transparent; color: var(--ink); border-color: currentColor; }
   .btn:hover { transform: none; }
 }
+/* "Go deeper" link to the day's Bible Breakdown blog post */
+.blog-link { display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; background: var(--tint); border-radius: var(--radius); padding: 22px clamp(22px, 4vw, 40px); margin-bottom: 24px; }
+.blog-link .eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; margin-bottom: 4px; }
+.blog-link-title { margin: 0; font-family: "Lora", Georgia, serif; font-size: 1.2rem; font-weight: 600; color: var(--ink); }
