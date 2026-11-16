@@ -467,3 +467,23 @@ blockquote cite, .verse cite { display: block; margin-top: .5em; font-style: nor
 .archive-list small { display: block; color: var(--muted); margin-top: 2px; }
 .media-links { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: -4px 0 22px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
 .media-links .episode-title { flex-basis: 100%; margin: 2px 0 0; color: var(--muted); font-size: .92rem; }
+/* Your Turn: reader's own SOAP */
+.my-soap { border-top: 4px solid var(--accent); }
+.my-soap form { margin-top: 18px; display: grid; gap: 18px; }
+.soap-field { display: grid; gap: 6px; }
+.soap-label { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--ink); font-size: 1.05rem; }
+.soap-field small { color: var(--muted); font-size: .92rem; }
+.soap-field textarea, .soap-field input {
+  width: 100%; font: inherit; font-size: 1rem; color: var(--text);
+  padding: 12px 14px; border: 1px solid #cfd6da; border-radius: 10px; background: #fff;
+  resize: vertical;
+}
+.soap-field textarea:focus, .soap-field input:focus { outline: 3px solid var(--accent-pale); border-color: var(--accent-deep); }
+.btn-link { background: none; border: 0; color: var(--muted); padding: .95em .6em; text-decoration: underline; }
+.btn-link:hover { color: var(--ink); transform: none; }
+.my-soap-status { min-height: 1.4em; }
+/* Phones keep :hover after a tap; don't leave outline buttons looking pressed. */
+@media (hover: none) {
+  .btn-outline:hover { background: transparent; color: var(--ink); border-color: currentColor; }
+  .btn:hover { transform: none; }
+}
