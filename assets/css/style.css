@@ -414,3 +414,5 @@ blockquote cite, .verse cite { display: block; margin-top: .5em; font-style: nor
 .btn svg, .tile a.more svg { width: 18px; height: 18px; flex-shrink: 0; }
 .grad-card.night { background: linear-gradient(115deg, #3a3a3a 0%, #5e7887 55%, #333 100%); }
 @media (min-width: 681px) { .span-2 { grid-column: span 2; } }
+.cafe-menu { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.cafe-menu li { padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,.12); color: #fff; font-weight: 600; font-size: .95rem; }
