@@ -67,7 +67,6 @@ NAV = [
     ]),
     ("Watch", [
         ("Watch Live", "/watch-live/"),
-        ("Message Notes", "/notes/"),
         ("Sermon Series Archive", LINKS["youtube"]),
         ("RLC Podcast", LINKS["podcast"]),
         ("The Bible Breakdown Podcast", LINKS["bible_podcast"]),
@@ -314,7 +313,8 @@ def build():
             site_url=SITE_URL,
             head_extra=meta.get("head", ""),
             og_image=og_image,
-            robots='<meta name="robots" content="noindex">\n' if slug == "404" else "",
+            # Message Notes stay unlisted (link only) while they're being tried out.
+            robots='<meta name="robots" content="noindex">\n' if slug == "404" or slug.startswith("notes") else "",
             ld="" if slug == "404" else structured_data(path, title),
             nav=render_nav(path),
             give=link_attrs(LINKS["give"]),
@@ -336,7 +336,7 @@ def build():
         print("built", out.relative_to(ROOT))
 
     # Sitemap for search engines.
-    slugs = [sl for sl, _ in entries]
+    slugs = [sl for sl, _ in entries if not sl.startswith("notes")]
     urls = ["/" if sl == "index" else f"/{sl}/" for sl in slugs if sl != "404"]
     (ROOT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
