@@ -1,0 +1,55 @@
+<!-- title: Daily Reading & SOAP -->
+<!-- description: Read today's Bible Breakdown chapter in the NLT and Pastor Brandon Cannon's daily SOAP devotion from Real Life Church in Bowling Green, KY. -->
+<!-- head: <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"> -->
+
+<section class="page-hero plain daily-hero">
+  <div class="wrap-narrow">
+    <span class="eyebrow">Bible Breakdown</span>
+    <h1>Today's Reading</h1>
+    <p>One chapter a day, plus a SOAP devotion: Scripture, Observation, Application, Prayer.</p>
+    <div class="btn-row" style="margin-top:24px">
+      <a class="btn btn-dark btn-sm" href="/daily/archive/">Past SOAPs</a>
+      <a class="btn btn-outline btn-sm" href="/the-bible/">How SOAP works</a>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight daily">
+  <div class="wrap-narrow">
+    <div class="day-nav">
+      <a id="prev" href="#" aria-label="Previous day">&larr; <span>Previous</span></a>
+      <p id="date" class="date"></p>
+      <a id="next" href="#" aria-label="Next day"><span>Next</span> &rarr;</a>
+    </div>
+
+    <section class="daily-card reading">
+      <p class="eyebrow" id="reading-label">Bible Breakdown · Today's Reading</p>
+      <h2 id="reading-title">Loading…</h2>
+      <div id="scripture-text" class="scripture-text" hidden></div>
+      <div id="reading-links" class="reading-links"></div>
+    </section>
+
+    <article class="daily-card devotion" id="devotion">
+      <p class="eyebrow">Daily SOAP</p>
+      <h2 id="soap-title" class="soap-title"></h2>
+      <p class="byline" id="byline"></p>
+      <div id="soap-body"></div>
+    </article>
+
+    <p class="today-link" id="today-link" hidden><a class="btn btn-dark" href="/daily/">Go to today &rarr;</a></p>
+
+    <div class="text-band" style="margin-top:40px">
+      <div>
+        <h2>Get it every morning</h2>
+        <p>Text <span class="keyword">rlcBible</span> to 94000, or listen to The Bible Breakdown podcast.</p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-dark" href="https://sms.clearstream.io/94000/rlcbible" target="_blank" rel="noopener">Text Me Daily</a>
+        <a class="btn btn-outline" href="{{link:bible_podcast}}" target="_blank" rel="noopener">Podcast</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="/assets/js/daily-config.js"></script>
+<script src="/assets/js/daily.js"></script>
