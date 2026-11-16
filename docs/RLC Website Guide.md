@@ -75,6 +75,7 @@ These change often, so they live in other tools, and the website just links to t
 - **Reading plan:** `daily/data/reading-plan.json`
 - **SOAPs:** `daily/data/soaps/YYYY-MM.json` (one file per month, one entry per date)
 - A date with no SOAP shows "coming soon." Future SOAPs never show early, so you can load them ahead.
+- **Listen / Watch buttons:** each day links to that day's Bible Breakdown podcast episode and YouTube video. A GitHub job finds new episodes automatically (about 5 AM, noon and 6 PM Central). Nothing to do; if an episode is posted with a title that doesn't start with the chapter (e.g. "Psalm 125: …"), it won't be matched, and the button falls back to the podcast page / a YouTube search. To check right away: GitHub → **Actions** → *Update daily podcast & video links* → **Run workflow**.
 - **NLT API key:** `assets/js/daily-config.js` (from api.nlt.to). It's meant to be public.
 - Easiest: paste new SOAPs into a Claude session and ask it to add them.
 

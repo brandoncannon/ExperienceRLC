@@ -1,0 +1,44 @@
+# Links each day's Bible Breakdown podcast episode and YouTube video on the
+# Daily Reading page. Runs early morning, midday and evening (US Central),
+# and can be run by hand from the Actions tab ("Run workflow").
+name: Update daily podcast & video links
+
+on:
+  schedule:
+    - cron: "17 11 * * *"   # about 5:17 AM Central
+    - cron: "17 18 * * *"   # about 12:17 PM Central
+    - cron: "17 0 * * *"    # about 6:17 PM Central
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: update-media
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Find today's episode and video
+        run: python3 _src/update_media.py
+
+      - name: Save and publish if anything changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- daily/data/media.json; then
+            echo "No new episodes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add daily/data/media.json
+          git commit -m "Update daily podcast & video links"
+          git push
+          # Ask GitHub Pages to rebuild the site with the new links.
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" || true
