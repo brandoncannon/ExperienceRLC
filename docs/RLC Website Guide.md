@@ -69,6 +69,14 @@ These change often, so they live in other tools, and the website just links to t
 
 ---
 
+## Worship Guide (for Linktree)
+
+- **Address:** https://www.experiencerlc.com/worship-guide/ (put this in Linktree). The old `/weekly-guide/` address forwards here.
+- **Unlisted:** not in the menu or Google, the same as Message Notes. People reach it from Linktree, a QR code, or the app.
+- **This Week's Message card** updates on its own: it shows the newest Message Notes (series graphic, title, speaker) and links to them.
+- **Announcements** live in `_src/worship-guide/announcements.txt`. Each one is `## Title`, a line of text, and an optional `Link: Button text | https://...`. Easiest: tell Claude "Update the worship guide announcements: …" and paste them in.
+- **Buttons** (Connect Card, Give, Prayer Request, Events, Daily Reading, Watch Live, App) stay the same every week.
+
 ## Daily Reading & SOAP
 
 - Shows the day's Bible Breakdown chapter (NLT) and that day's SOAP, based on the visitor's date.

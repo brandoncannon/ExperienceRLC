@@ -287,6 +287,60 @@ def relativize(html, depth):
     return re.sub(r'\b(href|src|content)="/(?!/)([^"]*)', lambda m: fix(m) if m.group(1) != "content" or m.group(2).startswith(("assets", "prayer", "life-groups")) else m.group(0), html)
 
 
+def worship_guide_parts():
+    """{{latest_message}} and {{announcements}} for the Worship Guide page."""
+    import build_notes
+    out = {"latest_message": "", "announcements": ""}
+    files = sorted(build_notes.NOTES.glob("[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].txt"), reverse=True)
+    if files:
+        m = build_notes.parse(files[0])["meta"]
+        esc = html_escape
+        pic = m.get("banner") or m.get("art")  # the wide series graphic reads best here
+        art = f'<img src="/assets/img/series/{esc(pic)}" alt="{esc(m.get("series", ""))}" loading="lazy">' if pic else ""
+        series = " · ".join(x for x in (m.get("series", ""), f'Part {m["part"]}' if m.get("part") else "") if x)
+        out["latest_message"] = f"""    <a class="guide-message" href="/notes/">
+      {art}
+      <span class="guide-message-text">
+        <span class="eyebrow">This Week's Message</span>
+        <strong>{esc(m.get("title", "Message Notes"))}</strong>
+        <small>{esc(series)}{" · " if series and m.get("speaker") else ""}{esc(m.get("speaker", ""))}</small>
+        <span class="btn btn-accent btn-sm">Open Message Notes {ICONS["arrow"]}</span>
+      </span>
+    </a>
+"""
+    src = SRC / "worship-guide" / "announcements.txt"
+    items, cur = [], None
+    for line in (src.read_text(encoding="utf-8").splitlines() if src.exists() else []):
+        t = line.strip()
+        if t.startswith("## "):
+            cur = {"title": t[3:].strip(), "text": [], "link": None, "image": None}
+            items.append(cur)
+        elif not t or t.startswith("#") or cur is None:
+            continue
+        elif t.lower().startswith("link:"):
+            label, _, url = t[5:].partition("|")
+            cur["link"] = (label.strip(), url.strip())
+        elif t.lower().startswith("image:"):
+            cur["image"] = t[6:].strip()
+        else:
+            cur["text"].append(t)
+    cards = []
+    for it in items:
+        img = f'<img src="/assets/img/{html_escape(it["image"])}" alt="" loading="lazy">' if it["image"] else ""
+        btn = ""
+        if it["link"]:
+            label, url = it["link"]
+            btn = f'<a class="btn btn-outline btn-sm" {link_attrs(url)}>{html_escape(label)}</a>'
+        text = "".join(f"<p>{html_escape(t)}</p>" for t in it["text"])
+        cards.append(f'      <article class="guide-card">{img}<div><h3>{html_escape(it["title"])}</h3>{text}{btn}</div></article>')
+    out["announcements"] = '    <div class="guide-cards">\n' + "\n".join(cards) + "\n    </div>\n"
+    return out
+
+
+def html_escape(s):
+    return (str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;"))
+
+
 def build():
     import build_notes  # Message Notes pages, written from _src/notes/*.txt
     entries = [
@@ -300,6 +354,9 @@ def build():
         body = re.sub(r"\{\{link:(\w+)\}\}", lambda m: LINKS[m.group(1)], body)
         body = re.sub(r"\{\{icon:(\w+)\}\}", lambda m: ICONS[m.group(1)], body)
         body = body.replace("{{socials}}", socials())
+        if "{{latest_message}}" in body or "{{announcements}}" in body:
+            for k, v in worship_guide_parts().items():
+                body = body.replace("{{" + k + "}}", v)
         path = "/" if slug == "index" else f"/{slug}/"
         title = meta.get("title", SITE_NAME)
         full_title = SITE_NAME + " | Bowling Green, KY" if slug == "index" else f"{title} | {SITE_NAME}"
@@ -314,7 +371,7 @@ def build():
             head_extra=meta.get("head", ""),
             og_image=og_image,
             # Message Notes stay unlisted (link only) while they're being tried out.
-            robots='<meta name="robots" content="noindex">\n' if slug == "404" or slug.startswith("notes") else "",
+            robots='<meta name="robots" content="noindex">\n' if slug == "404" or slug.startswith(("notes", "worship-guide")) else "",
             ld="" if slug == "404" else structured_data(path, title),
             nav=render_nav(path),
             give=link_attrs(LINKS["give"]),
@@ -336,7 +393,7 @@ def build():
         print("built", out.relative_to(ROOT))
 
     # Sitemap for search engines.
-    slugs = [sl for sl, _ in entries if not sl.startswith("notes")]
+    slugs = [sl for sl, _ in entries if not sl.startswith(("notes", "worship-guide"))]
     urls = ["/" if sl == "index" else f"/{sl}/" for sl in slugs if sl != "404"]
     (ROOT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -349,7 +406,7 @@ def build():
     # Old WordPress URLs that moved.
     redirects = {
         "prayer-2": "/prayer/",
-        "weekly-guide": LINKS["app"],
+        "weekly-guide": "/worship-guide/",
         "commonly-asked-questions": "/life-groups/#questions",
     }
     for old, new in redirects.items():

@@ -1,0 +1,25 @@
+# Worship Guide announcements
+# Shown at /worship-guide/ in this order. Lines starting with "#" are ignored.
+# Each announcement starts with "## Title", then a line or two of text,
+# then an optional button:  Link: Button text | https://...
+# Add a picture with:  Image: filename.jpg   (put the file in assets/img/)
+
+## RLC Connect
+New to RLC or ready to get connected? Join us the second Sunday of every month after the 11:00 service for a free lunch, our story, and how to find your place. Childcare provided.
+Link: See dates & register | https://experiencerlc.churchcenter.com/registrations/events
+
+## Tuesday Night Prayer
+Every Tuesday at 6:00pm we pray together for our church, our city, our nation, and our world.
+Link: More about prayer | /prayer/
+
+## Student Life
+Middle and high school students meet every Wednesday at 6:30pm.
+Link: Learn more | /student-life/
+
+## LifeGroups
+Life happens in circles, not rows. Find a group that fits your week.
+Link: Find a group | https://experiencerlc.churchcenter.com/groups
+
+## Read the Bible with us
+One chapter a day with The Bible Breakdown, plus a daily SOAP devotion.
+Link: Today's reading | /daily/
