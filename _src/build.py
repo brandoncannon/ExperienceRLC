@@ -288,16 +288,18 @@ def relativize(html, depth):
 
 
 def build():
-    pages = sorted((SRC / "pages").rglob("*.html"))
-    for page in pages:
-        raw = page.read_text(encoding="utf-8")
+    import build_notes  # Message Notes pages, written from _src/notes/*.txt
+    entries = [
+        (pg.relative_to(SRC / "pages").with_suffix("").as_posix(), pg.read_text(encoding="utf-8"))
+        for pg in sorted((SRC / "pages").rglob("*.html"))
+    ] + build_notes.pages()
+    for slug, raw in entries:
         meta = dict(re.findall(r"<!--\s*(\w+):\s*(.*?)\s*-->", raw[:600]))
         body = re.sub(r"\A(\s*<!--.*?-->\s*)+", "", raw, flags=re.S)
         # {{link:key}} and {{icon:key}} shortcuts
         body = re.sub(r"\{\{link:(\w+)\}\}", lambda m: LINKS[m.group(1)], body)
         body = re.sub(r"\{\{icon:(\w+)\}\}", lambda m: ICONS[m.group(1)], body)
         body = body.replace("{{socials}}", socials())
-        slug = page.relative_to(SRC / "pages").with_suffix("").as_posix()
         path = "/" if slug == "index" else f"/{slug}/"
         title = meta.get("title", SITE_NAME)
         full_title = SITE_NAME + " | Bowling Green, KY" if slug == "index" else f"{title} | {SITE_NAME}"
@@ -311,7 +313,8 @@ def build():
             site_url=SITE_URL,
             head_extra=meta.get("head", ""),
             og_image=og_image,
-            robots='<meta name="robots" content="noindex">\n' if slug == "404" else "",
+            # Message Notes stay unlisted (link only) while they're being tried out.
+            robots='<meta name="robots" content="noindex">\n' if slug == "404" or slug.startswith("notes") else "",
             ld="" if slug == "404" else structured_data(path, title),
             nav=render_nav(path),
             give=link_attrs(LINKS["give"]),
@@ -333,7 +336,7 @@ def build():
         print("built", out.relative_to(ROOT))
 
     # Sitemap for search engines.
-    slugs = [pg.relative_to(SRC / "pages").with_suffix("").as_posix() for pg in pages]
+    slugs = [sl for sl, _ in entries if not sl.startswith("notes")]
     urls = ["/" if sl == "index" else f"/{sl}/" for sl in slugs if sl != "404"]
     (ROOT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
