@@ -699,3 +699,12 @@ html.lights-down .n-hero.has-art { background: var(--s-bg); }
 .n-banner { aspect-ratio: 1664 / 620; object-fit: cover; }
 .n-hero.has-banner .wrap-narrow { margin-top: calc(min(900px, 100%) * -0.1); }
 @media (max-width: 700px) { .n-hero.has-banner .wrap-narrow { margin-top: -12%; } }
+/* "Go deeper" link to the day's Bible Breakdown blog post */
+.blog-link { display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; background: var(--tint); border-radius: var(--radius); padding: 22px clamp(22px, 4vw, 40px); margin-bottom: 24px; }
+.blog-link .eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; margin-bottom: 4px; }
+.blog-link-title { margin: 0; font-family: "Lora", Georgia, serif; font-size: 1.2rem; font-weight: 600; color: var(--ink); }
+/* Events card and full-width "Take your next step" banner on the homepage */
+.grad-card.dusk { background: linear-gradient(115deg, rgba(21, 60, 93, .94) 0%, rgba(63, 88, 102, .86) 55%, rgba(21, 60, 93, .9) 100%), url("../img/cafe.jpg") center / cover; }
+.statement-card.wide { grid-column: 1 / -1; min-height: 0; padding: clamp(28px, 4vw, 44px) clamp(28px, 4vw, 48px); justify-content: space-between; }
+.statement-card.wide span br { display: none; }
+.statement-card.wide::after { content: "→"; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; color: var(--ink); }

@@ -79,6 +79,12 @@
           `<a class="btn btn-accent btn-sm" href="${esc(yt ? yt.url : YT_SEARCH(chapter))}" target="_blank" rel="noopener">${ICON_PLAY} ${yt ? "Watch on YouTube" : "Find it on YouTube"}</a>` +
           ((pod || yt) ? `<p class="episode-title">${esc((pod || yt).title)}</p>` : "");
         box.hidden = false;
+        // "Go deeper" link to that day's Bible Breakdown blog post.
+        const blog = m.blog;
+        $("blog-link-title").textContent = blog ? blog.title : `Read more about ${chapter} on The Bible Breakdown`;
+        $("blog-link-btn").href = blog ? blog.url : "https://www.thebiblebreakdown.com/";
+        $("blog-link-btn").innerHTML = blog ? "Read the blog post &rarr;" : "Visit the blog &rarr;";
+        $("blog-link").hidden = false;
       });
 
   // ---- Reading plan ----
