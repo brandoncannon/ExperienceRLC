@@ -13,6 +13,19 @@ Your domain stays at GoDaddy. The website moves to GitHub Pages (free, with free
 
    You can also check **My Products** in GoDaddy: a separate "Email" or "Microsoft 365" product means email is its own service.
 
+## What your DNS looks like now (checked November 16, 2026)
+
+| Type  | Name         | Value                                         | During the switch |
+|-------|--------------|-----------------------------------------------|-------------------|
+| A     | @            | 107.180.28.113 (GoDaddy WordPress hosting)    | **Replace** with the four GitHub addresses below |
+| CNAME | www          | experiencerlc.com (`@`)                       | **Change** to `brandoncannon.github.io` |
+| MX    | @            | experiencerlc-com.mail.protection.outlook.com | Leave alone (Microsoft 365 email) |
+| TXT   | @            | `v=spf1 include:spf.protection.outlook.com -all`, `NETORGFT6462049.onmicrosoft.com`, two `google-site-verification=…` | Leave alone |
+| CNAME | autodiscover | autodiscover.outlook.com                      | Leave alone (lets Outlook set itself up) |
+| A     | mail         | 107.180.28.113                                | Leave alone for now |
+
+Email (pastor@, info@ and every other @experiencerlc.com address) runs on **Microsoft 365 bought through GoDaddy**, a separate service from the WordPress hosting. Changing the website doesn't affect it. Keep paying for the Microsoft 365 email; only the hosting plan goes away later.
+
 ## The switch (about 30 minutes plus waiting)
 
 1. **Merge the site into `main`.** Merge the `claude/experiencerlc-redesign-7be62v` branch into `main` (it already includes the `CNAME` file that tells GitHub the site's address).
