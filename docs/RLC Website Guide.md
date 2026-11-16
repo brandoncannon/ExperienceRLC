@@ -88,7 +88,7 @@ These change often, so they live in other tools, and the website just links to t
 - **Go deeper:** a link to that day's post on thebiblebreakdown.com, found the same way (posts whose title starts with the chapter). Re-run chapters with no new post link to that chapter's most recent post.
 - **Listen / Watch buttons:** each day links to that day's Bible Breakdown podcast episode and YouTube video. A GitHub job finds new episodes automatically (about 5 AM, noon and 6 PM Central). Nothing to do; if an episode is posted with a title that doesn't start with the chapter (e.g. "Psalm 125: …"), it won't be matched, and the button falls back to the podcast page / a YouTube search. To check right away: GitHub → **Actions** → *Update daily podcast & video links* → **Run workflow**.
 - **NLT API key:** `assets/js/daily-config.js` (from api.nlt.to). It's meant to be public.
-- Easiest: paste new SOAPs into a Claude session and ask it to add them.
+- **SOAPs fill in automatically:** publish a SOAP from the SOAP folder in Obsidian (cannonstudybible.com) and a GitHub job (*Sync SOAPs from Cannon Study Bible*, every two hours) adds it to its reading-plan day. Edits you publish to today's or a future SOAP flow through too; past days are left alone. To run it right away: GitHub → **Actions** → *Sync SOAPs from Cannon Study Bible* → **Run workflow**.
 
 ---
 
