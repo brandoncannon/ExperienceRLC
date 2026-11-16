@@ -5,14 +5,17 @@ Your domain stays at GoDaddy. The website moves to GitHub Pages (free, with free
 ## Before you start
 
 1. **Back up WordPress.** In GoDaddy, open your hosting (cPanel) and use **Backup** or **File Manager** to download the site files and database. Keep this so nothing is lost.
-2. **Find out where your email lives.** In GoDaddy, go to **Domains → experiencerlc.com → DNS** and look at the **MX** records:
-   - `outlook.com` / `secureserver.net` → Microsoft 365 or GoDaddy email. Not affected by this switch.
-   - `google.com` → Google Workspace. Not affected.
-   - Anything pointing at your hosting server (cPanel email) → your email depends on the hosting plan. **Don't cancel the hosting plan** until email is moved.
+2. **Find out where your email lives.** In GoDaddy, go to **Domains → experiencerlc.com → DNS** and look at the **MX** records (the "Value" or "Points to" column):
+   - `...mail.protection.outlook.com` → Microsoft 365 (often sold by GoDaddy as "Professional Email" or "Microsoft 365 from GoDaddy"). **Safe**, not affected.
+   - `...secureserver.net` → GoDaddy Workspace Email. **Safe**, not affected.
+   - `...google.com` or `...googlemail.com` → Google Workspace. **Safe**, not affected.
+   - `mail.experiencerlc.com`, `experiencerlc.com`, or `@` → email runs on your **hosting server** (cPanel email). **Not safe yet.** Email depends on the hosting plan, and one DNS record needs extra care. Stop here and ask for help before step 3 below.
+
+   You can also check **My Products** in GoDaddy: a separate "Email" or "Microsoft 365" product means email is its own service.
 
 ## The switch (about 30 minutes plus waiting)
 
-1. **Merge the site into `main`.** Merge the `claude/experiencerlc-redesign-7be62v` branch, and add a file named `CNAME` containing `www.experiencerlc.com`. (Claude can do this for you.)
+1. **Merge the site into `main`.** Merge the `claude/experiencerlc-redesign-7be62v` branch into `main` (it already includes the `CNAME` file that tells GitHub the site's address).
 2. **Turn on GitHub Pages.** Repository **Settings → Pages** → Source: *Deploy from a branch* → Branch: `main`, folder `/ (root)` → **Save**. Under **Custom domain**, enter `www.experiencerlc.com` and save.
 3. **Point the domain at GitHub.** In GoDaddy **DNS**, change only these records:
 
