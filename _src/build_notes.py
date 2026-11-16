@@ -175,11 +175,21 @@ ICON = {
     "share": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>',
     "pen": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></svg>',
     "image": '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 18h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    "insta": '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></svg>',
     "moon": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>',
     "text": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 19 8 5h2l5 14h-2.2l-1.3-3.8H6.5L5.2 19H3zm4.2-5.8h3.6L9 7.9l-1.8 5.3zM16 19l3-8h1.6l3 8H22l-.7-2h-3l-.7 2H16zm2.1-3.4h2.2l-1.1-3.1-1.1 3.1z"/></svg>',
     "eye": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>',
     "play": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg>',
 }
+
+
+def share_buttons():
+    """Share, Instagram and wallpaper buttons for a quotable line."""
+    return (
+        f'<button type="button" class="n-chip" data-share-quote>{ICON["share"]}Share</button>'
+        f'<button type="button" class="n-chip" data-instagram>{ICON["insta"]}Share on Instagram</button>'
+        f'<button type="button" class="n-chip" data-wallpaper>{ICON["image"]}Save as wallpaper</button>'
+    )
 
 
 def render_items(items, blanks, cache, point_id):
@@ -198,14 +208,15 @@ def render_items(items, blanks, cache, point_id):
         elif kind == "heading":
             out.append(f'<h3 class="n-sub" data-keep>{inline(text, blanks)}</h3>')
         elif kind == "takeaway":
-            out.append(f'<p class="n-takeaway" data-keep>{inline(text, blanks)}</p>')
+            out.append(
+                f'<div class="n-takeaway" data-quote="{html.escape(plain(text))}"><p data-keep>{inline(text, blanks)}</p>'
+                f'<p class="n-actions">{share_buttons()}</p></div>'
+            )
         elif kind == "bigidea":
             label, idea = text
             out.append(
                 f'<section class="n-bigidea" data-quote="{html.escape(plain(idea))}"><p class="n-label">{html.escape(label)}</p>'
-                f'<p class="n-big" data-keep>{inline(idea, blanks)}</p><p class="n-actions">'
-                f'<button type="button" class="n-chip" data-share-quote>{ICON["share"]}Share</button>'
-                f'<button type="button" class="n-chip" data-wallpaper>{ICON["image"]}Save as wallpaper</button></p></section>'
+                f'<p class="n-big" data-keep>{inline(idea, blanks)}</p><p class="n-actions">{share_buttons()}</p></section>'
             )
         elif kind == "bullet":
             bullets.append(inline(text, blanks))
@@ -213,8 +224,7 @@ def render_items(items, blanks, cache, point_id):
             q = html.escape(text)
             out.append(
                 f'<figure class="n-quote" data-quote="{q}"><blockquote>{q}</blockquote>'
-                f'<figcaption><button type="button" class="n-chip" data-share-quote>{ICON["share"]}Share</button>'
-                f'<button type="button" class="n-chip" data-wallpaper>{ICON["image"]}Save as wallpaper</button></figcaption></figure>'
+                f'<figcaption>{share_buttons()}</figcaption></figure>'
             )
         elif kind == "scripture":
             ref, words = text
@@ -351,7 +361,7 @@ def render(msg, cache, all_msgs):
 <dialog class="n-wall" aria-label="Phone wallpaper">
   <p class="n-wall-tip">Press and hold the image to save it, then set it as your lock screen.</p>
   <img alt="">
-  <div class="btn-row"><button type="button" class="btn btn-dark btn-sm" data-wall-save>Save image</button><button type="button" class="btn btn-outline btn-sm" data-wall-close>Close</button></div>
+  <div class="btn-row"><button type="button" class="btn btn-dark btn-sm" data-wall-save>Save image</button><a class="btn btn-outline btn-sm" data-wall-insta href="https://www.instagram.com/" target="_blank" rel="noopener" hidden>Open Instagram</a><button type="button" class="btn btn-outline btn-sm" data-wall-close>Close</button></div>
 </dialog>
 </div>
 <script src="/assets/js/notes.js"></script>

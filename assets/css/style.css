@@ -668,3 +668,8 @@ html.lights-down .blank-input { color: var(--ink); }
 .blank.right .blank-input { border: 0; border-bottom: 2px solid var(--n-right); color: var(--n-right); }
 .blank.revealed .blank-input { border: 0; border-bottom: 2px solid var(--muted); color: var(--muted); }
 .n-takeaway .blank-input, .n-bigidea .blank-input { background: transparent; }
+/* Shareable takeaways */
+.n-takeaway > p { margin: 0; }
+.n-takeaway .n-actions { margin-top: 12px; font-weight: 600; }
+.n-takeaway .n-chip, .n-bigidea .n-chip { background: rgba(255, 255, 255, .55); }
+html.lights-down .n-takeaway .n-chip, html.lights-down .n-bigidea .n-chip { background: transparent; }

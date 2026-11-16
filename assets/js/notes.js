@@ -169,8 +169,10 @@
     if (line) lines.push(line);
     return lines;
   };
-  const makeWallpaper = (quote) => {
-    const W = 1170, H = 2532, c = document.createElement("canvas");
+  // story: 1080×1920 for Instagram Stories, text centered. Otherwise a phone lock screen,
+  // with the top third left clear for the clock.
+  const makeImage = (quote, story) => {
+    const W = story ? 1080 : 1170, H = story ? 1920 : 2532, c = document.createElement("canvas");
     c.width = W; c.height = H;
     const ctx = c.getContext("2d");
     const g = ctx.createLinearGradient(0, 0, W * 0.4, H);
@@ -186,8 +188,7 @@
     let lines = wrap(ctx, quote, W - pad * 2);
     while (lines.length > 7 && fs > 64) { fs -= 8; ctx.font = `700 ${fs}px Figtree, system-ui, sans-serif`; lines = wrap(ctx, quote, W - pad * 2); }
     const lh = fs * 1.18;
-    // Leave the top third clear for the phone's clock.
-    let y = H * 0.44;
+    let y = story ? (H - lines.length * lh) / 2 + fs * 0.5 : H * 0.44;
     ctx.fillStyle = "#9ecbd1"; ctx.fillRect(pad, y - fs - 70, 96, 10);
     ctx.fillStyle = "#ffffff"; ctx.textBaseline = "alphabetic";
     lines.forEach((l) => { ctx.fillText(l, pad, y); y += lh; });
@@ -196,17 +197,43 @@
     ctx.fillText(`${root.dataset.series} · ${root.dataset.title}`, pad, y + 60);
     ctx.font = "500 40px Figtree, system-ui, sans-serif";
     ctx.fillStyle = "rgba(255,255,255,.6)";
-    ctx.fillText("experiencerlc.com", pad, H - 200);
+    ctx.fillText("experiencerlc.com", pad, H - (story ? 160 : 200));
     return c.toDataURL("image/png");
   };
-  $$("[data-wallpaper]").forEach((btn) => btn.addEventListener("click", () => {
+  const showImage = (url, alt, insta) => {
     if (!dialog) return;
+    wallImg.src = url;
+    wallImg.alt = alt;
+    $(".n-wall-tip", dialog).textContent = insta
+      ? "Press and hold the image to save it to your photos. Then open Instagram and add it to your story or a post."
+      : "Press and hold the image to save it, then set it as your lock screen.";
+    $("[data-wall-insta]", dialog).hidden = !insta;
+    if (dialog.showModal) dialog.showModal(); else dialog.setAttribute("open", "");
+  };
+  $$("[data-wallpaper]").forEach((btn) => btn.addEventListener("click", () => {
     const q = `“${quoteOf(btn)}”`;
-    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
-      wallImg.src = makeWallpaper(q);
-      wallImg.alt = `Wallpaper: ${q}`;
-      if (dialog.showModal) dialog.showModal(); else dialog.setAttribute("open", "");
-    });
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => showImage(makeImage(q, false), `Wallpaper: ${q}`, false));
+  }));
+
+  // ---- Share on Instagram: a Story-sized image handed to the phone's share sheet ----
+  const toFile = (url, name) => {
+    const bin = atob(url.split(",")[1]);
+    const bytes = new Uint8Array(bin.length);
+    for (let k = 0; k < bin.length; k++) bytes[k] = bin.charCodeAt(k);
+    return new File([bytes], name, { type: "image/png" });
+  };
+  $$("[data-instagram]").forEach((btn) => btn.addEventListener("click", () => {
+    const q = `“${quoteOf(btn)}”`;
+    // Made right away (no waiting) so the phone still counts this as a tap and allows sharing.
+    const url = makeImage(q, true);
+    const file = toFile(url, `rlc-${root.dataset.date}-story.png`);
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file] }).catch((e) => {
+        if (!e || e.name !== "AbortError") showImage(url, `Instagram image: ${q}`, true);
+      });
+    } else {
+      showImage(url, `Instagram image: ${q}`, true);
+    }
   }));
   if (dialog) {
     $("[data-wall-close]", dialog).addEventListener("click", () => dialog.close ? dialog.close() : dialog.removeAttribute("open"));
