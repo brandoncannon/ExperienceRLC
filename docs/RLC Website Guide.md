@@ -93,7 +93,7 @@ These change often, so they live in other tools, and the website just links to t
 | A | @ | 185.199.109.153 | GitHub (website) |
 | A | @ | 185.199.110.153 | GitHub (website) |
 | A | @ | 185.199.111.153 | GitHub (website) |
-| CNAME | www | experiencerlc.com (@) | Sends www to the same place |
+| CNAME | www | brandoncannon.github.io | Sends www to GitHub |
 | MX | @ | experiencerlc-com.mail.protection.outlook.com | **Email** (Microsoft 365) |
 | TXT | @ | `v=spf1 include:spf.protection.outlook.com -all` and others | **Email security** + Google verification |
 | CNAME | autodiscover | autodiscover.outlook.com | Outlook setup |
@@ -106,9 +106,10 @@ These change often, so they live in other tools, and the website just links to t
 - [x] New site merged into `gh-pages` (Nov 15, 2026)
 - [x] GitHub Pages set to `gh-pages` / root, custom domain `www.experiencerlc.com`
 - [x] GoDaddy A records switched to GitHub (Nov 15, 2026)
-- [ ] GitHub Pages: tick **Enforce HTTPS** once "DNS check successful" shows
+- [x] Security certificate (padlock) issued by GitHub (Nov 16, 2026)
+- [ ] GitHub Pages: tick **Enforce HTTPS** (Settings → Pages)
 - [ ] Send a test email to pastor@experiencerlc.com and info@experiencerlc.com
-- [ ] Google Search Console → **Sitemaps** → submit `sitemap.xml` (and remove any old WordPress sitemap)
+- [x] Google Search Console → **Sitemaps** → submitted `https://www.experiencerlc.com/sitemap.xml` (Nov 16, 2026)
 - [ ] Google Business Profile: check name, address, phone, service times and website link
 - [ ] Around **Dec 15, 2026**: cancel the GoDaddy **hosting** plan (WordPress). **Keep** the domain and Microsoft 365 email.
 - [ ] Optional cleanup (ask Claude): delete the `preview/` test folder and the old `claude/daily-bible-devotion-site-6146k3` branch
@@ -117,7 +118,7 @@ These change often, so they live in other tools, and the website just links to t
 1. On a computer, open https://search.google.com/search-console and sign in.
 2. Top left: pick **experiencerlc.com** (if missing, add it as a **Domain** property and verify with the TXT record Google gives you).
 3. Left menu → **Sitemaps**.
-4. Type `sitemap.xml` → **Submit**. It should say **Success** (can take a day).
+4. Type the full address `https://www.experiencerlc.com/sitemap.xml` → **Submit**. (Typing only `sitemap.xml` gives "Invalid sitemap address".) It should say **Success** (can take a day).
 5. Optional: paste `https://www.experiencerlc.com/` in the top search bar → **Request indexing**.
 
 ---
