@@ -13,13 +13,17 @@ It reads the way a printed handout does:
     Big Idea: Gratitude isn't a feeling I wait for. It's a [choice] I make.
 
     An opening paragraph. Each line is its own paragraph.
-    Scripture: Philippians 4:6-7   (the NLT text is filled in for you)
+    (Romans 1:16-17) The verse, typed the way you want it shown.
+    (Philippians 4:6-7)            (reference only: the NLT text is filled in)
+    Principle: The main idea. People can share it or save it as a wallpaper.
+    ### A small heading
 
-    # The first point, with a [blank] in it.
+    # (v6a) The first point, with a [blank] in it.
+    Takeaway: A line to stand out, like "The Gospel gives us the ability to..."
     Quote: A line people can share or save as a phone wallpaper.
     - A bullet point
 
-    ## Talk It Over
+    ## Questions for Reflection
     - A LifeGroup question
 
     ## This Week
@@ -97,7 +101,10 @@ def inline(text, blanks):
     def blank(m):
         blanks.append(m.group(1))
         ans = html.escape(m.group(1))
-        return f'<span class="blank" data-answer="{ans}" style="--len:{max(len(m.group(1)), 4)}"><span class="blank-text">{ans}</span></span>'
+        return (
+            f'<span class="blank" data-answer="{ans}"><input type="text" class="blank-input" style="--len:{max(len(m.group(1)), 5)}" '
+            'aria-label="Fill in the blank" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="next"></span>'
+        )
 
     out = re.sub(r"\[([^\]]+)\]", blank, out)
     return re.sub(r"\*([^*]+)\*", r"<em>\1</em>", out)
@@ -107,6 +114,10 @@ def plain(text):
     return re.sub(r"[\[\]*]", "", text)
 
 
+# "(Romans 1:16-17) For I am not ashamed..." — a reference in parentheses, then the verse as you want it shown.
+SCRIPTURE_LINE = re.compile(r"^\(((?:[1-3] ?)?[A-Z][A-Za-z]+(?: (?:of )?[A-Z][a-z]+)* ?\d+[:\d\w ,\-–]*)\)\s*(.*)$")
+
+
 def parse(path):
     lines = path.read_text(encoding="utf-8").splitlines()
     meta, i = {}, 0
@@ -114,7 +125,7 @@ def parse(path):
         k, _, v = lines[i].partition(":")
         meta[k.strip().lower()] = v.strip()
         i += 1
-    msg = {"meta": meta, "big_idea": "", "intro": [], "points": [], "questions": [], "challenge": []}
+    msg = {"meta": meta, "intro": [], "points": [], "questions": [], "challenge": [], "talk_title": "Talk It Over"}
     target = msg["intro"]
     section = None
     for line in lines[i:]:
@@ -122,20 +133,33 @@ def parse(path):
         if not s:
             continue
         low = s.lower()
-        if low.startswith("big idea:"):
-            msg["big_idea"] = s.split(":", 1)[1].strip()
+        ref = SCRIPTURE_LINE.match(s)
+        if low.startswith(("big idea:", "principle:")):
+            label, _, text = s.partition(":")
+            target.append(("bigidea", (label.strip(), text.strip())))
+        elif s.startswith("### "):
+            target.append(("heading", s[4:].strip()))
         elif s.startswith("## "):
             section = s[3:].strip().lower()
-            target = msg["questions"] if section.startswith("talk") else msg["challenge"]
+            if "question" in section or "talk" in section:
+                msg["talk_title"] = s[3:].strip()
+                section = "talk"
+                target = msg["questions"]
+            else:
+                target = msg["challenge"]
         elif s.startswith("# "):
             section = None
             point = {"title": s[2:].strip(), "items": []}
             msg["points"].append(point)
             target = point["items"]
-        elif section and section.startswith("talk"):
+        elif section == "talk":
             target.append(s.lstrip("- ").strip())
         elif low.startswith("scripture:"):
-            target.append(("scripture", s.split(":", 1)[1].strip()))
+            target.append(("scripture", (s.split(":", 1)[1].strip(), "")))
+        elif ref:
+            target.append(("scripture", (ref.group(1).strip(), ref.group(2).strip())))
+        elif low.startswith("takeaway:"):
+            target.append(("takeaway", s.split(":", 1)[1].strip()))
         elif low.startswith("quote:"):
             target.append(("quote", s.split(":", 1)[1].strip()))
         elif s.startswith("- "):
@@ -163,14 +187,26 @@ def render_items(items, blanks, cache, point_id):
 
     def flush():
         if bullets:
-            out.append("<ul class=\"n-bullets\">" + "".join(f"<li>{b}</li>" for b in bullets) + "</ul>")
+            out.append("<ul class=\"n-bullets\">" + "".join(f"<li data-keep>{b}</li>" for b in bullets) + "</ul>")
             bullets.clear()
 
     for kind, text in items:
         if kind != "bullet":
             flush()
         if kind == "p":
-            out.append(f"<p>{inline(text, blanks)}</p>")
+            out.append(f"<p data-keep>{inline(text, blanks)}</p>")
+        elif kind == "heading":
+            out.append(f'<h3 class="n-sub" data-keep>{inline(text, blanks)}</h3>')
+        elif kind == "takeaway":
+            out.append(f'<p class="n-takeaway" data-keep>{inline(text, blanks)}</p>')
+        elif kind == "bigidea":
+            label, idea = text
+            out.append(
+                f'<section class="n-bigidea" data-quote="{html.escape(plain(idea))}"><p class="n-label">{html.escape(label)}</p>'
+                f'<p class="n-big" data-keep>{inline(idea, blanks)}</p><p class="n-actions">'
+                f'<button type="button" class="n-chip" data-share-quote>{ICON["share"]}Share</button>'
+                f'<button type="button" class="n-chip" data-wallpaper>{ICON["image"]}Save as wallpaper</button></p></section>'
+            )
         elif kind == "bullet":
             bullets.append(inline(text, blanks))
         elif kind == "quote":
@@ -181,18 +217,22 @@ def render_items(items, blanks, cache, point_id):
                 f'<button type="button" class="n-chip" data-wallpaper>{ICON["image"]}Save as wallpaper</button></figcaption></figure>'
             )
         elif kind == "scripture":
-            body = nlt(text, cache) or '<p class="n-muted">Open it in your Bible app.</p>'
-            link = "https://www.biblegateway.com/passage/?" + urllib.parse.urlencode({"search": text, "version": "NLT"})
+            ref, words = text
+            if words:
+                has_blank = "[" in words
+                body = f'<p{" data-keep" if has_blank else ""}>{inline(words, blanks)}</p>'
+            else:
+                body = nlt(ref, cache) or '<p class="n-muted">Open it in your Bible app.</p>'
+            link = "https://www.biblegateway.com/passage/?" + urllib.parse.urlencode({"search": ref, "version": "NLT"})
             out.append(
-                f'<div class="n-scripture"><p class="n-ref"><a href="{link}" target="_blank" rel="noopener">{html.escape(text)}</a> <span>NLT</span></p>'
+                f'<div class="n-scripture"><p class="n-ref" data-keep><a href="{link}" target="_blank" rel="noopener">{html.escape(ref)}</a> <span>NLT</span></p>'
                 f'<div class="n-verse">{body}</div></div>'
             )
     flush()
     if point_id:
         out.append(
-            f'<div class="n-mynote"><button type="button" class="n-chip n-addnote" aria-expanded="false" aria-controls="note-{point_id}">{ICON["pen"]}Add my own note</button>'
-            f'<label class="sr-only" for="note-{point_id}">My note</label>'
-            f'<textarea id="note-{point_id}" class="n-note-input" data-note="{point_id}" rows="3" placeholder="What is God saying to you here?" hidden></textarea></div>'
+            f'<div class="n-mynote"><label class="n-note-label" for="note-{point_id}">{ICON["pen"]}My notes</label>'
+            f'<textarea id="note-{point_id}" class="n-note-input" data-note="{point_id}" rows="2" placeholder="Write anything that stands out to you…"></textarea></div>'
         )
     return "".join(out)
 
@@ -202,13 +242,18 @@ def render(msg, cache, all_msgs):
     blanks = []
     when = date.fromisoformat(m["date"])
     pretty = f"{when:%B} {when.day}, {when.year}"
-    big = inline(msg["big_idea"], blanks) if msg["big_idea"] else ""
 
     points = []
+    intro = render_items(msg["intro"], blanks, cache, "intro")
     for n, p in enumerate(msg["points"], 1):
+        t = p["title"]
+        tag = re.match(r"\((v[\w-]+)\)\s*", t)
+        chip = f'<span class="n-vtag">{html.escape(tag.group(1))}</span>' if tag else ""
+        if tag:
+            t = t[tag.end():]
         points.append(
             f'<section class="n-point" id="point-{n}" data-point="{n}"><h2><span class="n-num" aria-hidden="true">{n}</span>'
-            f'<span class="n-title">{inline(p["title"], blanks)}</span></h2>'
+            f'<span class="n-title">{chip}{inline(t, blanks)}</span></h2>'
             f'{render_items(p["items"], blanks, cache, str(n))}</section>'
         )
 
@@ -216,7 +261,7 @@ def render(msg, cache, all_msgs):
     if msg["questions"]:
         qs = "".join(f"<li>{inline(q, blanks)}</li>" for q in msg["questions"])
         questions = (
-            '<details class="n-panel" id="talk"><summary><span><span class="n-label">For LifeGroups &amp; family</span>Talk It Over</span>'
+            f'<details class="n-panel" id="talk"><summary><span><span class="n-label">For LifeGroups &amp; family</span>{html.escape(msg["talk_title"])}</span>'
             f'<span class="n-count">{len(msg["questions"])} questions</span></summary><ol class="n-questions">{qs}</ol></details>'
         )
 
@@ -249,7 +294,6 @@ def render(msg, cache, all_msgs):
         )
         past = f'<section class="n-past"><h2>Earlier messages</h2><ul class="archive-list">{items}</ul></section>'
 
-    intro = render_items(msg["intro"], blanks, cache, None)
     part = f'<span class="n-part">{html.escape(m["part"])}</span>' if m.get("part") else ""
 
     body = f"""
@@ -265,7 +309,7 @@ def render(msg, cache, all_msgs):
 
 <div class="n-tools" role="toolbar" aria-label="Notes settings">
   <div class="wrap-narrow">
-    <span class="n-progress" aria-live="polite"><b data-filled>0</b> of {len(blanks)} blanks</span>
+    <span class="n-progress" aria-live="polite"><b data-filled>0</b> of {len(blanks)} blanks filled</span>
     <span class="n-tool-buttons">
       <button type="button" class="n-tool" data-reveal aria-pressed="false">{ICON['eye']}<span>Fill them in</span></button>
       <button type="button" class="n-tool" data-textsize aria-label="Text size">{ICON['text']}<span>Size</span></button>
@@ -275,7 +319,7 @@ def render(msg, cache, all_msgs):
 </div>
 
 <div class="wrap-narrow n-body">
-  {f'<section class="n-bigidea" data-quote="{html.escape(plain(msg["big_idea"]))}"><p class="n-label">The Big Idea</p><p class="n-big">{big}</p><p class="n-actions"><button type="button" class="n-chip" data-share-quote>{ICON["share"]}Share</button><button type="button" class="n-chip" data-wallpaper>{ICON["image"]}Save as wallpaper</button></p></section>' if big else ''}
+  <p class="n-hint">Tap a blank to fill it in. It turns green when it matches. Everything you type saves on this phone.</p>
   <div class="n-intro">{intro}</div>
   {''.join(points)}
   {challenge}
@@ -283,16 +327,12 @@ def render(msg, cache, all_msgs):
 
   <section class="n-panel n-send" id="send">
     <p class="n-label">Keep your notes</p>
-    <p>Your blanks and notes save on this phone automatically. Send yourself a copy to keep.</p>
-    <form class="n-send-form" novalidate>
-      <label class="sr-only" for="n-email">Your email</label>
-      <input id="n-email" type="email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com">
-      <div class="btn-row">
-        <button class="btn btn-dark btn-sm" type="submit">Email me my notes</button>
-        <button class="btn btn-outline btn-sm" type="button" data-copy-notes>Copy</button>
-      </div>
-      <p class="n-muted n-status" role="status" aria-live="polite"></p>
-    </form>
+    <p>Send your filled-in notes to yourself by email or text, or save them in your Notes app.</p>
+    <div class="btn-row">
+      <button class="btn btn-dark btn-sm" type="button" data-send-notes>Send my notes</button>
+      <button class="btn btn-outline btn-sm" type="button" data-copy-notes>Copy</button>
+    </div>
+    <p class="n-muted n-status" role="status" aria-live="polite"></p>
   </section>
 
   <section class="n-respond">

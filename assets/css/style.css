@@ -633,3 +633,29 @@ html.lights-down .site-footer, html.lights-down .site-footer a { color: var(--te
 @media (prefers-reduced-motion: reduce) { .blank.pop::after { animation: none; } .n-toast { transition: none; } }
 .n-quote blockquote { border: 0; padding: 0; background: none; }
 .n-chip[hidden] { display: none; }
+/* Message Notes, round 2: easy-to-spot blanks, always-open notes, takeaways */
+.n-hint { margin: 0 0 22px; padding: 12px 16px; border-radius: var(--radius-sm); background: var(--bg-soft); color: var(--muted); font-size: .9rem; }
+.blank-input {
+  min-width: 5.5em; padding: .08em .35em; margin: .1em .1em;
+  background: var(--accent-pale); border: 2px solid var(--accent); border-bottom: 3px solid var(--accent-deep);
+  border-radius: 8px; color: var(--ink); text-align: center; font-size: .95em;
+  box-shadow: inset 0 1px 2px rgba(21, 60, 93, .08); cursor: text;
+}
+.blank-input:focus { background: var(--n-paper); border-color: var(--accent-deep); outline: 3px solid var(--accent-pale); }
+.blank.right .blank-input { border: 2px solid var(--n-right); }
+.blank.revealed .blank-input { border: 2px solid var(--line); }
+.n-sub { font-size: 1.15em; margin: 28px 0 4px; color: var(--ink); }
+.n-takeaway { margin: 4px 0 20px; padding: 14px 18px; border-radius: var(--radius-sm); background: var(--tint); font-weight: 700; color: var(--ink); line-height: 1.55; }
+.n-vtag { display: inline-block; vertical-align: middle; margin: -3px 8px 0 0; padding: 2px 8px; border-radius: 999px; background: var(--accent-pale); color: var(--accent-deep); font-size: .55em; font-weight: 800; letter-spacing: .04em; }
+.n-point h2 { line-height: 1.6; }
+.n-mynote { margin: 4px 0 22px; display: grid; gap: 6px; }
+.n-note-label { display: inline-flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.n-note-label svg { width: 15px; height: 15px; }
+.n-note-input {
+  min-height: 3.6em; overflow: hidden;
+  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(1.5em - 1px), rgba(91, 141, 174, .22) calc(1.5em - 1px), rgba(91, 141, 174, .22) 1.5em);
+  background-attachment: local; line-height: 1.5em; padding: 6px 14px;
+}
+html.lights-down .n-note-input { background-color: #0f2233; }
+html.lights-down .blank-input { color: var(--ink); }
+.n-intro > .n-bigidea { margin: 8px 0 22px; }

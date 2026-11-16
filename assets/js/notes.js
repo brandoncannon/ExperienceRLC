@@ -43,18 +43,10 @@
   // ---- Fill-in blanks ----
   const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
   const blanks = $$(".blank").map((span, i) => {
-    const answer = span.dataset.answer;
-    const input = document.createElement("input");
-    input.type = "text";
-    input.className = "blank-input";
-    input.autocomplete = "off";
-    input.autocapitalize = "off";
-    input.spellcheck = false;
-    input.setAttribute("aria-label", "Fill in the blank");
+    const input = $("input", span);
     input.id = `blank-${i}`;
     input.value = saved.blanks[i] || "";
-    span.replaceChildren(input);
-    return { span, input, answer, i };
+    return { span, input, answer: span.dataset.answer, i };
   });
   const isRight = (b) => norm(b.input.value) === norm(b.answer);
   const filledEl = $("[data-filled]");
@@ -125,16 +117,13 @@
   });
 
   // ---- My own notes under each point ----
-  $$(".n-mynote").forEach((box) => {
-    const btn = $(".n-addnote", box);
-    const ta = $("textarea", box);
+  // The box grows as you write.
+  const grow = (ta) => { ta.style.height = "auto"; ta.style.height = ta.scrollHeight + 2 + "px"; };
+  $$(".n-note-input").forEach((ta) => {
     const id = ta.dataset.note;
-    if (saved.notes[id]) { ta.value = saved.notes[id]; ta.hidden = false; btn.hidden = true; }
-    btn.addEventListener("click", () => {
-      ta.hidden = false; btn.hidden = true; btn.setAttribute("aria-expanded", "true"); ta.focus();
-    });
-    ta.addEventListener("input", () => { saved.notes[id] = ta.value; save(); });
-    ta.addEventListener("blur", () => { if (!ta.value.trim()) { ta.hidden = true; btn.hidden = false; btn.setAttribute("aria-expanded", "false"); } });
+    if (saved.notes[id]) ta.value = saved.notes[id];
+    if (ta.value) grow(ta);
+    ta.addEventListener("input", () => { saved.notes[id] = ta.value; save(); grow(ta); });
   });
 
   // ---- Weekly challenge ----
@@ -238,39 +227,52 @@
       inp.replaceWith(live && live.value.trim() ? live.value.trim().toUpperCase() : "_____");
     });
     $$("sup", c).forEach((s) => s.replaceWith(""));
+    $$(".n-vtag", c).forEach((s) => s.replaceWith(`(${s.textContent}) `));
     return c.textContent.replace(/\s+/g, " ").trim();
   };
   const compose = () => {
     const meta = $(".n-meta");
-    const out = [`${root.dataset.title} — ${root.dataset.series}`, meta ? meta.textContent.trim() : "", ""];
-    const big = $(".n-big");
-    if (big) out.push(`BIG IDEA: ${textOf(big)}`, "");
-    $$(".n-point").forEach((p) => {
-      out.push(`${p.dataset.point}. ${textOf($(".n-title", p))}`);
-      $$(".n-ref a", p).forEach((r) => out.push(`   ${r.textContent} (NLT)`));
-      $$(".n-bullets li", p).forEach((li) => out.push(`   • ${textOf(li)}`));
-      const note = $("textarea", p);
-      if (note && note.value.trim()) out.push(`   My note: ${note.value.trim()}`);
-      out.push("");
+    const out = [`${root.dataset.title} \u2014 ${root.dataset.series}`, meta ? meta.textContent.trim() : "", ""];
+    $$("[data-keep], .n-point h2, .n-note-input").forEach((el) => {
+      const point = el.closest(".n-point");
+      const indent = point ? "   " : "";
+      if (el.matches(".n-note-input")) {
+        if (el.value.trim()) out.push(`${indent}MY NOTES: ${el.value.trim()}`);
+      } else if (el.matches(".n-point h2")) {
+        out.push("", `${point.dataset.point}. ${textOf($(".n-title", el))}`);
+      } else if (el.matches(".n-ref")) {
+        out.push(`${indent}(${$("a", el).textContent})`);
+      } else {
+        out.push(`${indent}${textOf(el)}`);
+      }
     });
     const qs = $$(".n-questions li");
-    if (qs.length) { out.push("TALK IT OVER"); qs.forEach((q, k) => out.push(`${k + 1}. ${textOf(q)}`)); out.push(""); }
-    out.push(`Notes online: ${location.href.split("#")[0]}`);
+    if (qs.length) {
+      const title = $("#talk summary > span");
+      out.push("", (title ? title.lastChild.textContent : "Questions").toUpperCase());
+      qs.forEach((q, k) => out.push(`${k + 1}. ${textOf(q)}`));
+    }
+    out.push("", `Notes online: ${location.href.split("#")[0]}`);
     return out.join("\n");
   };
-  const form = $(".n-send-form");
   const status = $(".n-status");
-  if (form) {
-    const email = form.elements.email;
-    email.value = store.get("rlc-notes-email") || "";
-    email.addEventListener("input", () => store.set("rlc-notes-email", email.value.trim()));
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const to = email.value.trim();
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) { status.textContent = "Enter your email address so your email app knows where to send it."; email.focus(); return; }
-      status.textContent = "Opening your email app…";
-      location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent("My notes: " + root.dataset.title)}&body=${encodeURIComponent(compose())}`;
-    });
-    $("[data-copy-notes]").addEventListener("click", () => copy(compose()).then(() => { status.textContent = "Copied. Paste it into Notes or a text."; }));
-  }
+  const subject = `My notes: ${root.dataset.title}`;
+  const sendBtn = $("[data-send-notes]");
+  if (sendBtn) sendBtn.addEventListener("click", () => {
+    const text = compose();
+    // Phones: the share sheet (Mail, Messages, Notes...). Computers: the email app.
+    if (navigator.share) {
+      navigator.share({ title: subject, text })
+        .then(() => { status.textContent = "Sent."; })
+        .catch((e) => {
+          if (e && e.name === "AbortError") return;
+          copy(text).then(() => { status.textContent = "Sharing isn't available here, so your notes were copied. Paste them into an email, a text or Notes."; });
+        });
+    } else {
+      status.textContent = "Opening your email app\u2026 If nothing opens, use Copy.";
+      location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
+    }
+  });
+  const copyBtn = $("[data-copy-notes]");
+  if (copyBtn) copyBtn.addEventListener("click", () => copy(compose()).then(() => { status.textContent = "Copied. Paste it into an email, a text or your Notes app."; }));
 })();
