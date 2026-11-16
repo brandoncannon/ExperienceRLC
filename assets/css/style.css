@@ -413,3 +413,4 @@ blockquote cite, .verse cite { display: block; margin-top: .5em; font-style: nor
 
 .btn svg, .tile a.more svg { width: 18px; height: 18px; flex-shrink: 0; }
 .grad-card.night { background: linear-gradient(115deg, #3a3a3a 0%, #5e7887 55%, #333 100%); }
+@media (min-width: 681px) { .span-2 { grid-column: span 2; } }
