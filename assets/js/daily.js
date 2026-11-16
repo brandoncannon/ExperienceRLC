@@ -61,6 +61,26 @@
     if (a && a.nextElementSibling) a.nextElementSibling.classList.toggle("open");
   });
 
+  // ---- That day's podcast episode and YouTube video (daily/data/media.json, updated each morning) ----
+  const PODCAST_HOME = "https://thebiblebreakdown.buzzsprout.com/";
+  const YT_SEARCH = (q) => `https://www.youtube.com/@theBrandonCannon/search?query=${encodeURIComponent(q)}`;
+  const ICON_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg>';
+  const ICON_HEAD = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>';
+  const showMedia = (chapter) =>
+    fetch(DATA + "media.json", { cache: "no-cache" })
+      .then((r) => (r.ok ? r.json() : {}))
+      .catch(() => ({}))
+      .then((all) => {
+        const m = all[key] || {};
+        const pod = m.podcast, yt = m.youtube;
+        const box = $("media-links");
+        box.innerHTML =
+          `<a class="btn btn-dark btn-sm" href="${esc(pod ? pod.url : PODCAST_HOME)}" target="_blank" rel="noopener">${ICON_HEAD} ${pod ? "Listen to the episode" : "The Bible Breakdown podcast"}</a>` +
+          `<a class="btn btn-accent btn-sm" href="${esc(yt ? yt.url : YT_SEARCH(chapter))}" target="_blank" rel="noopener">${ICON_PLAY} ${yt ? "Watch on YouTube" : "Find it on YouTube"}</a>` +
+          ((pod || yt) ? `<p class="episode-title">${esc((pod || yt).title)}</p>` : "");
+        box.hidden = false;
+      });
+
   // ---- Reading plan ----
   fetch(DATA + "reading-plan.json", { cache: "no-cache" })
     .then((r) => r.json())
@@ -81,6 +101,7 @@
         .map((p) => `<a href="${bibleUrl(p)}" target="_blank" rel="noopener">${esc(p)} in the ${esc(cfg.bibleVersion || "NET")} &#8599;</a>`)
         .join(" · ");
       $("reading-links").innerHTML = `<p class="note">Read in another translation: ${otherLinks}</p>`;
+      showMedia(passages[0]);
       // Chapter text on the page: NLT from Tyndale's API, falling back to the stored WEB text.
       const showText = (htmlText, credit, cls) => {
         $("scripture-text").innerHTML = htmlText + `<p class="translation">${credit}</p>`;
