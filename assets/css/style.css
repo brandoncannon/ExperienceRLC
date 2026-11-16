@@ -408,3 +408,4 @@ blockquote cite, .verse cite { display: block; margin-top: .5em; font-style: nor
 }
 
 .btn svg, .tile a.more svg { width: 18px; height: 18px; flex-shrink: 0; }
+.grad-card.night { background: linear-gradient(115deg, #10171a 0%, #24343b 50%, #0b1012 100%); }

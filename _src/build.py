@@ -146,7 +146,7 @@ CHURCH_LD = {
     "alternateName": "RLC",
     "url": SITE_URL + "/",
     "logo": SITE_URL + "/assets/img/logo.png",
-    "image": SITE_URL + "/assets/img/worship-stage.jpg",
+    "image": SITE_URL + "/assets/img/baptism.jpg",
     "description": "A life-giving church in Bowling Green, Kentucky that exists to make disciples by knowing God, growing in freedom, and sharing Christ in everyday life.",
     "telephone": "+1-270-681-5298",
     "email": "info@experiencerlc.com",
@@ -301,7 +301,7 @@ def build():
         title = meta.get("title", SITE_NAME)
         full_title = SITE_NAME + " | Bowling Green, KY" if slug == "index" else f"{title} | {SITE_NAME}"
         hero = re.search(r'class="hero-media"><img src="/(assets/img/[^"]+)"', body)
-        og_image = f"{SITE_URL}/{hero.group(1) if hero else 'assets/img/worship-stage.jpg'}"
+        og_image = f"{SITE_URL}/{hero.group(1) if hero else 'assets/img/baptism.jpg'}"
         html = LAYOUT.format(
             title=full_title,
             description=meta.get("description", ""),
