@@ -1,0 +1,54 @@
+# Pulls Brandon's published SOAPs from cannonstudybible.com (Obsidian Publish)
+# onto the Daily Reading page. Publish a SOAP in Obsidian and it shows up here
+# within about two hours. Can also be run by hand from the Actions tab
+# ("Sync SOAPs from Cannon Study Bible" → "Run workflow").
+name: Sync SOAPs from Cannon Study Bible
+
+on:
+  schedule:
+    - cron: "23 */2 * * *"   # every two hours
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: sync-soaps
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      # The live site is the gh-pages branch, so read and write there.
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Get the sync script
+        run: |
+          # The script lives on the default branch; use that copy so the job
+          # works even before the script is merged into gh-pages.
+          git fetch --depth=1 origin "${{ github.event.repository.default_branch }}"
+          git show "FETCH_HEAD:_src/sync_soaps.py" > /tmp/sync_soaps.py
+          mkdir -p _src && cp /tmp/sync_soaps.py _src/sync_soaps.py
+
+      - name: Pull published SOAPs
+        run: python3 _src/sync_soaps.py
+
+      - name: Save and publish if anything changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git checkout -- _src/sync_soaps.py 2>/dev/null || true
+          if git diff --quiet -- daily/data/soaps; then
+            echo "Nothing new."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add daily/data/soaps
+          git commit -m "Daily SOAPs from Cannon Study Bible"
+          git push origin HEAD:gh-pages
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" || true
