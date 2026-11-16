@@ -306,10 +306,20 @@ def render(msg, cache, all_msgs):
 
     part = f'<span class="n-part">{html.escape(m["part"])}</span>' if m.get("part") else ""
 
+    # Series graphic (assets/img/series/) and its two colors: "Colors: background, text".
+    art, theme, hero_cls = "", "", "n-hero"
+    if m.get("art"):
+        art = f'<img class="n-art" src="/assets/img/series/{html.escape(m["art"])}" alt="{html.escape(m.get("series", ""))} series graphic">'
+        hero_cls += " has-art"
+    colors = [c.strip() for c in m.get("colors", "").split(",") if re.fullmatch(r"#[0-9a-fA-F]{6}", c.strip())]
+    if len(colors) == 2:
+        theme = f' style="--s-bg:{colors[0]};--s-fg:{colors[1]}"'
+
     body = f"""
-<div class="notes" data-date="{m['date']}" data-title="{html.escape(plain(m.get('title', '')))}" data-series="{html.escape(m.get('series', ''))}" data-speaker="{html.escape(m.get('speaker', ''))}">
-<section class="n-hero">
+<div class="notes{' has-theme' if theme else ''}"{theme} data-date="{m['date']}" data-title="{html.escape(plain(m.get('title', '')))}" data-series="{html.escape(m.get('series', ''))}" data-speaker="{html.escape(m.get('speaker', ''))}">
+<section class="{hero_cls}">
   <div class="wrap-narrow">
+    {art}
     <p class="n-series"><span>{html.escape(m.get('series', ''))}</span>{part}</p>
     <h1>{html.escape(plain(m.get('title', '')))}</h1>
     <p class="n-meta">{html.escape(m.get('speaker', ''))} · {pretty}</p>

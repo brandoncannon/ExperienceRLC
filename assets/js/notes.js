@@ -171,34 +171,58 @@
   };
   // story: 1080×1920 for Instagram Stories, text centered. Otherwise a phone lock screen,
   // with the top third left clear for the clock.
-  const makeImage = (quote, story) => {
+  // Uses the series colors and graphic when the message has them.
+  const css = getComputedStyle(root);
+  const seriesBg = css.getPropertyValue("--s-bg").trim();
+  const seriesFg = css.getPropertyValue("--s-fg").trim();
+  const makeImage = (quote, story, noArt) => {
     const W = story ? 1080 : 1170, H = story ? 1920 : 2532, c = document.createElement("canvas");
     c.width = W; c.height = H;
     const ctx = c.getContext("2d");
-    const g = ctx.createLinearGradient(0, 0, W * 0.4, H);
-    g.addColorStop(0, "#1d4a70"); g.addColorStop(1, "#0b1f31");
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    // Soft aqua glow, like stage light.
-    const glow = ctx.createRadialGradient(W * 0.85, H * 0.18, 10, W * 0.85, H * 0.18, W * 0.9);
-    glow.addColorStop(0, "rgba(158,203,209,.35)"); glow.addColorStop(1, "rgba(158,203,209,0)");
-    ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+    const ink = seriesFg || "#ffffff", soft = seriesFg || "#cfe6ea", accent = seriesFg || "#9ecbd1";
     const pad = 120;
+    const art = !noArt && document.querySelector(".n-art");
+    if (seriesBg) {
+      ctx.fillStyle = seriesBg; ctx.fillRect(0, 0, W, H);
+      // The graphic goes under the shading so its background blends in.
+      if (art && art.complete && art.naturalWidth) {
+        const aw = W - pad * 2, ah = aw * art.naturalHeight / art.naturalWidth;
+        ctx.drawImage(art, pad, story ? 190 : H - 330 - ah, aw, ah);
+      }
+      const shade = ctx.createLinearGradient(0, 0, 0, H);
+      shade.addColorStop(0, "rgba(255,255,255,.05)"); shade.addColorStop(1, "rgba(0,0,0,.28)");
+      ctx.fillStyle = shade; ctx.fillRect(0, 0, W, H);
+    } else {
+      const g = ctx.createLinearGradient(0, 0, W * 0.4, H);
+      g.addColorStop(0, "#1d4a70"); g.addColorStop(1, "#0b1f31");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      // Soft aqua glow, like stage light.
+      const glow = ctx.createRadialGradient(W * 0.85, H * 0.18, 10, W * 0.85, H * 0.18, W * 0.9);
+      glow.addColorStop(0, "rgba(158,203,209,.35)"); glow.addColorStop(1, "rgba(158,203,209,0)");
+      ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+    }
     let fs = 104;
     ctx.font = `700 ${fs}px Figtree, system-ui, sans-serif`;
     let lines = wrap(ctx, quote, W - pad * 2);
     while (lines.length > 7 && fs > 64) { fs -= 8; ctx.font = `700 ${fs}px Figtree, system-ui, sans-serif`; lines = wrap(ctx, quote, W - pad * 2); }
     const lh = fs * 1.18;
     let y = story ? (H - lines.length * lh) / 2 + fs * 0.5 : H * 0.44;
-    ctx.fillStyle = "#9ecbd1"; ctx.fillRect(pad, y - fs - 70, 96, 10);
-    ctx.fillStyle = "#ffffff"; ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = accent; ctx.fillRect(pad, y - fs - 70, 96, 10);
+    ctx.fillStyle = ink; ctx.textBaseline = "alphabetic";
     lines.forEach((l) => { ctx.fillText(l, pad, y); y += lh; });
     ctx.font = "600 44px Figtree, system-ui, sans-serif";
-    ctx.fillStyle = "#cfe6ea";
+    ctx.fillStyle = soft;
     ctx.fillText(`${root.dataset.series} · ${root.dataset.title}`, pad, y + 60);
     ctx.font = "500 40px Figtree, system-ui, sans-serif";
-    ctx.fillStyle = "rgba(255,255,255,.6)";
+    ctx.globalAlpha = 0.65; ctx.fillStyle = ink;
     ctx.fillText("experiencerlc.com", pad, H - (story ? 160 : 200));
-    return c.toDataURL("image/png");
+    ctx.globalAlpha = 1;
+    try {
+      return c.toDataURL("image/png");
+    } catch (e) {
+      // The browser can refuse to export a picture that includes the graphic; leave it out.
+      return noArt ? "" : makeImage(quote, story, true);
+    }
   };
   const showImage = (url, alt, insta) => {
     if (!dialog) return;

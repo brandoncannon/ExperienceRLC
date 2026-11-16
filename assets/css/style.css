@@ -673,3 +673,12 @@ html.lights-down .blank-input { color: var(--ink); }
 .n-takeaway .n-actions { margin-top: 12px; font-weight: 600; }
 .n-takeaway .n-chip, .n-bigidea .n-chip { background: rgba(255, 255, 255, .55); }
 html.lights-down .n-takeaway .n-chip, html.lights-down .n-bigidea .n-chip { background: transparent; }
+/* Series graphic and colors (Art: / Colors: in the notes file) */
+.n-hero.has-art { background: var(--s-bg, var(--charcoal)); text-align: center; }
+.n-hero.has-art::after { border-color: rgba(255, 255, 255, .04); }
+.n-art { display: block; width: min(560px, 100%); height: auto; margin: 0 auto 22px; }
+.n-hero.has-art .n-series { justify-content: center; color: var(--s-fg, var(--accent)); opacity: .85; }
+.n-hero.has-art h1 { color: var(--s-fg, #fff); }
+.n-hero.has-art .n-meta { color: var(--s-fg, #fff); opacity: .8; }
+.has-theme .n-num { background: var(--s-bg); color: var(--s-fg); }
+html.lights-down .n-hero.has-art { background: var(--s-bg); }
