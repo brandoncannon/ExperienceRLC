@@ -24,6 +24,7 @@ updated: 2026-11-16
 | Pull requests (changes waiting to go live) | https://github.com/brandoncannon/ExperienceRLC/pulls |
 | Domain & DNS (GoDaddy) | https://dcc.godaddy.com/control/portfolio → experiencerlc.com → DNS |
 | Email (pastor@, info@) | Microsoft 365, bought through GoDaddy. Separate from the website. |
+| Visitor numbers (GoatCounter) | https://experiencerlc.goatcounter.com |
 | Google Search Console | https://search.google.com/search-console |
 | Google Business Profile | https://business.google.com |
 | Make changes with Claude | https://claude.ai/code |
@@ -76,6 +77,13 @@ These change often, so they live in other tools, and the website just links to t
 - **Evergreen:** nothing on it needs weekly updates. The **Message Notes** button always opens the newest notes.
 - **Get Connected** cards (year-round, not weekly) live in `_src/worship-guide/announcements.txt`. Each one is `## Title`, a line of text, and an optional `Link: Button text | https://...`. Easiest: tell Claude "Update the worship guide Get Connected cards: …" and paste them in.
 - **Buttons** (Connect Card, Give, Prayer Request, Events, Daily Reading, Watch Live, App) stay the same every week.
+
+## Visitor numbers
+
+- **Dashboard:** https://experiencerlc.goatcounter.com (log in with the email you used to sign up).
+- Shows visitors per day, the most-visited pages, where people came from (Google, Facebook, Linktree, the app), and phones vs. computers.
+- No cookies, so no cookie banner is needed. Only visits to experiencerlc.com are counted; test links aren't.
+- The counter is `assets/js/count.js`, loaded on every page.
 
 ## Daily Reading & SOAP
 

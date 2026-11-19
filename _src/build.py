@@ -270,6 +270,7 @@ LAYOUT = """<!doctype html>
   </div>
 </footer>
 <script src="/assets/js/main.js" defer></script>
+<script src="/assets/js/count.js" defer></script>
 </body>
 </html>
 """
