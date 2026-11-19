@@ -22,7 +22,11 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
+      # The live site is the gh-pages branch; always read and write there,
+      # whichever branch is the repository's default.
       - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
 
       - name: Find today's episode and video
         run: python3 _src/update_media.py
@@ -39,6 +43,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add daily/data/media.json
           git commit -m "Update daily podcast & video links"
-          git push
+          git push origin HEAD:gh-pages
           # Ask GitHub Pages to rebuild the site with the new links.
           gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" || true
