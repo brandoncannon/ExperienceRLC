@@ -24,7 +24,7 @@ It reads the way a printed handout does:
     - A bullet point
 
     ## Questions for Reflection
-    - A LifeGroup question
+    - A Life Group question
 
     ## This Week
     The weekly challenge.
@@ -271,7 +271,7 @@ def render(msg, cache, all_msgs):
     if msg["questions"]:
         qs = "".join(f"<li>{inline(q, blanks)}</li>" for q in msg["questions"])
         questions = (
-            f'<details class="n-panel" id="talk"><summary><span><span class="n-label">For LifeGroups &amp; family</span>{html.escape(msg["talk_title"])}</span>'
+            f'<details class="n-panel" id="talk"><summary><span><span class="n-label">For Life Groups &amp; family</span>{html.escape(msg["talk_title"])}</span>'
             f'<span class="n-count">{len(msg["questions"])} questions</span></summary><ol class="n-questions">{qs}</ol></details>'
         )
 
@@ -366,7 +366,7 @@ def render(msg, cache, all_msgs):
       <a href="{{{{link:connect_card}}}}" target="_blank" rel="noopener"><b>I said yes to Jesus</b><span>Let us know so we can celebrate and help.</span></a>
       <a href="/water-baptism/"><b>Get baptized</b><span>Sign up for the next baptism Sunday.</span></a>
       <a href="/prayer/"><b>Ask for prayer</b><span>Our prayer team would love to pray with you.</span></a>
-      <a href="{{{{link:groups}}}}" target="_blank" rel="noopener"><b>Join a LifeGroup</b><span>Talk this message over with friends.</span></a>
+      <a href="{{{{link:groups}}}}" target="_blank" rel="noopener"><b>Join a Life Group</b><span>Talk this message over with friends.</span></a>
     </div>
   </section>
 

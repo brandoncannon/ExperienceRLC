@@ -33,7 +33,7 @@ updated: 2026-11-16
 These change often, so they live in other tools, and the website just links to them. Updating them there updates the site automatically.
 
 - **Events & RLC Connect sign-ups:** Church Center → https://experiencerlc.churchcenter.com/registrations/events
-- **LifeGroups:** Church Center → https://experiencerlc.churchcenter.com/groups
+- **Life Groups:** Church Center → https://experiencerlc.churchcenter.com/groups
 - **Connect card / prayer requests:** Church Center form
 - **Giving:** Tithe.ly
 - **Sermons:** YouTube (youtube.com/myreallifechurch) and the RLC Podcast
@@ -152,7 +152,7 @@ These change often, so they live in other tools, and the website just links to t
 
 ## Site facts
 
-- **Pages:** Home, New Here, Who We Are, Our Story, Leadership, Beliefs, Next Steps, Water Baptism, Daily Reading & SOAP, The Bible, LifeGroups, RLC Connect, Serve, KidsLife, Student Life, Prayer, Hope Cafe, Counseling Center, Watch Live, Give, Contact
+- **Pages:** Home, New Here, Who We Are, Our Story, Leadership, Beliefs, Next Steps, Water Baptism, Daily Reading & SOAP, The Bible, Life Groups, RLC Connect, Serve, Kids Life, Student Life, Prayer, Hope Cafe, Counseling Center, Watch Live, Give, Contact
 - **Colors:** navy #153C5D · steel blue #5B8DAE · slate #5E7887 · aqua #9ECBD1 · cream #E8DFCE · charcoal #4D4D4D · white
 - **Font:** Figtree (Lora for Scripture on the daily page)
 - **Old WordPress addresses** like `/new-here/` and `/leadership/` still work. `/prayer-2/` forwards to `/prayer/`.
