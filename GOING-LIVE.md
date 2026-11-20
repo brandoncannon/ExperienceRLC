@@ -61,4 +61,4 @@ Email (pastor@, info@ and every other @experiencerlc.com address) runs on **Micr
 
 ## What changes for old links
 
-Page addresses are the same as the WordPress site (`/new-here/`, `/leadership/`, `/kidslife/`, …). `/prayer-2/` forwards to `/prayer/`, `/commonly-asked-questions/` to the LifeGroups page, and `/weekly-guide/` to the RLC app. Old WordPress image links (`/wp-content/...`) and the RSS feed will stop working once the hosting is cancelled.
+Page addresses are the same as the WordPress site (`/new-here/`, `/leadership/`, `/kidslife/`, …). `/prayer-2/` forwards to `/prayer/`, `/commonly-asked-questions/` to the Life Groups page, and `/weekly-guide/` to the RLC app. Old WordPress image links (`/wp-content/...`) and the RSS feed will stop working once the hosting is cancelled.
