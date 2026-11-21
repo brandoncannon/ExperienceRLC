@@ -815,3 +815,9 @@ html.lights-down .n-link { background: rgba(255,255,255,.08); color: #fff; }
 .install-card.flash { animation: install-flash 1.6s ease; }
 @keyframes install-flash { 0%, 100% { box-shadow: 0 0 0 0 rgba(91,141,174,0); } 25% { box-shadow: 0 0 0 6px rgba(91,141,174,.55); } }
 @media (prefers-reduced-motion: reduce) { .install-card.flash { animation: none; outline: 3px solid var(--steel, #5B8DAE); } }
+/* Get the App: two options (app store, or home screen) */
+.app-options-intro { text-align: center; font-size: 1.15rem; font-weight: 600; color: var(--ink); margin: 0 0 20px; }
+.app-option .eyebrow, .app-option-head .eyebrow { margin-bottom: 6px; }
+.app-option h2, .app-option-head h2 { margin-top: 0; }
+.app-option-head { margin: 36px 0 16px; }
+.app-option-head p { color: var(--muted); margin: 0; }
