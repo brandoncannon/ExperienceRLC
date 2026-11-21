@@ -20,16 +20,17 @@
   });
   // The button always shows. Where the browser can install directly (Chrome on
   // Android and computers) it opens the install prompt; everywhere else (iPhone,
-  // Samsung Internet, in-app browsers) it jumps to the steps for that phone.
+  // Samsung Internet, in-app browsers) it jumps to the two options (app store, or the home-screen steps).
   var deferred = null;
   window.addEventListener("beforeinstallprompt", function (e) {
     e.preventDefault();
     deferred = e;
   });
   function showSteps() {
-    var card = document.querySelector('[data-show]:not([hidden])');
+    var intro = document.querySelector(".app-options-intro");
+    var card = document.querySelector(".app-option") || document.querySelector('[data-show]:not([hidden])');
     if (!card) return;
-    card.scrollIntoView({ behavior: "smooth", block: "center" });
+    (intro || card).scrollIntoView({ behavior: "smooth", block: "start" });
     card.classList.remove("flash");
     void card.offsetWidth;
     card.classList.add("flash");
