@@ -761,3 +761,15 @@ html.lights-down .n-hero.has-art { background: var(--s-bg); }
 .install-steps .glyph svg { width: 20px; height: 20px; vertical-align: -4px; color: #007aff; }
 .app-icon.light { background: #fff; border: 1px solid var(--line); }
 .app-icon.light img { width: 56px; height: 56px; }
+
+
+/* Legacy 2026 homepage banner (shows through Jan 15, 2027; see _src/pages/index.html) */
+.legacy-banner { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 20px; padding: 14px max(16px, env(safe-area-inset-left, 0px)); background: #0c0f13; color: #eef0ea; text-decoration: none; text-align: center; line-height: 1.35; }
+.legacy-banner[hidden] { display: none; }
+.legacy-banner-word { font-weight: 800; font-size: 1.35rem; letter-spacing: -.02em; background: linear-gradient(90deg, #79bbff, #a6d96f 50%, #ff8f5e); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.legacy-banner-text { font-size: 1rem; color: #c9cfd3; }
+.legacy-banner-text strong { color: #fff; }
+.legacy-banner-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: #e8c670; color: #0c0f13; font-weight: 700; font-size: .95rem; transition: transform .2s; }
+.legacy-banner-btn svg { width: 16px; height: 16px; }
+.legacy-banner:hover .legacy-banner-btn { transform: translateX(3px); }
+.legacy-banner:focus-visible { outline: 3px solid #e8c670; outline-offset: -3px; }
