@@ -3,9 +3,8 @@ Part: Week 2 of 4
 Title: At the Movies
 Date: 2026-11-22
 Speaker: Pastor Brandon Cannon
-Art: at-the-movies-logo.jpg
 Banner: at-the-movies.jpg
-Colors: #141414, #f2c14e
+Colors: #08293c, #efe6d6
 
 # Next Steps
 Based on what you have heard today, what next steps do you need to take?
