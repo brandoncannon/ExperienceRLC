@@ -18,17 +18,33 @@
     var w = el.getAttribute("data-show");
     el.hidden = !((w === "installed" && standalone) || (w === "ios" && isIOS && !standalone) || (w === "android" && !isIOS && !standalone));
   });
+  // The button always shows. Where the browser can install directly (Chrome on
+  // Android and computers) it opens the install prompt; everywhere else (iPhone,
+  // Samsung Internet, in-app browsers) it jumps to the steps for that phone.
   var deferred = null;
   window.addEventListener("beforeinstallprompt", function (e) {
     e.preventDefault();
     deferred = e;
-    document.querySelectorAll("[data-install]").forEach(function (b) { b.hidden = false; });
   });
+  function showSteps() {
+    var card = document.querySelector('[data-show]:not([hidden])');
+    if (!card) return;
+    card.scrollIntoView({ behavior: "smooth", block: "center" });
+    card.classList.remove("flash");
+    void card.offsetWidth;
+    card.classList.add("flash");
+  }
   document.querySelectorAll("[data-install]").forEach(function (b) {
+    if (standalone) return;  // already using the app
+    b.hidden = false;
     b.addEventListener("click", function () {
-      if (!deferred) return;
-      deferred.prompt();
-      deferred.userChoice.finally(function () { deferred = null; b.hidden = true; });
+      if (!deferred) { showSteps(); return; }
+      var d = deferred;
+      deferred = null;
+      try {
+        d.prompt();
+        d.userChoice.then(function (c) { if (c && c.outcome !== "accepted") showSteps(); }, showSteps);
+      } catch (err) { showSteps(); }
     });
   });
   window.addEventListener("appinstalled", function () {
