@@ -39,8 +39,8 @@ LINKS = {
     "text_alerts": "sms:94000?&body=reallife",
     "counseling_form": "https://forms.gle/Je6UF3yQepL8sQFy9",
     "maps": "https://maps.google.com/?q=2714+Scottsville+Road+Bowling+Green+KY+42104",
-    # Message Notes: the website's own notes page (updated every Friday from
-    # the notes in Google Drive). Subsplash's notes were used here temporarily.
+    # Message Notes everywhere (app home, app Messages tab, worship guide): the
+    # website's own notes page, updated every Friday from the notes in Google Drive.
     "notes": "/notes/",
 }
 
