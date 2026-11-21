@@ -56,16 +56,47 @@ Subsplash can open a web page **inside the app**. Pages on the website look just
 | Kids Life | https://www.experiencerlc.com/kidslife/ |
 | Prayer | https://www.experiencerlc.com/prayer/ |
 
-## 5. Suggested layout
+## 5. Screen-by-screen plan (your current app)
 
-Bottom tabs (keep it to five):
+Your five tabs already match the website, so keep them. Use the **wide** tiles for the big full-width cards, and the **square** tiles for the small list thumbnails.
 
-1. **Home:** the tiles below, in this order
-2. **Watch:** Watch Live plus your sermon series
-3. **Daily Reading:** opens https://www.experiencerlc.com/daily/
-4. **Give**
-5. **More:** Kids Life, Life Groups, Prayer, RLC Connect, About, Contact
+### Welcome tab (top to bottom)
+| Card | Tile | Links to |
+|---|---|---|
+| Worship Guide (replaces "Weekly Worship Guide") | `worship-guide` | /worship-guide/ |
+| Daily Reading (replaces "SOAP Bible Reading Plan") | `daily-reading` | /daily/ |
+| Message Notes | `message-notes` | /notes/ |
+| Give | `give` | Tithe.ly (or Subsplash Giving) |
+| RLC Connect | `rlc-connect` | /rlcconnect/ |
+| Life Groups | `life-groups` | Church Center groups |
+| Events | `events` | Church Center events |
+| Counseling Center | `counseling-center` | /rlcc/ |
+| Pray First App | keep your current graphic | (it's Pray First's own branding) |
+| Connect Card | `connect-card` | Church Center connect card |
 
-**Home screen order:** Worship Guide (great on Sundays) · Daily Reading · Message Notes · Events · RLC Connect · Life Groups · Kids Life · Prayer.
+Remove the second "RLC Connect" card and the "Connect" (train) card. They repeat the cards above.
 
-This mirrors the website's menu, so people find things in the same place on both.
+### Messages tab
+| Card | Tile | Links to |
+|---|---|---|
+| Watch Live & Past Messages (replaces the gray YouTube box) | `watch-live` | YouTube channel or /watch-live/ |
+| Message Notes (replaces the gray notepad box) | `message-notes` | /notes/ |
+
+### Connect tab
+- **Top banner:** `rlc-connect` (banner), replacing the "Welcome Home / RLC Connect 5PM" slides.
+- **List thumbnails (square):** Location & Service Times → `location` (/new-here/) · Events → `events` · Life Groups → `life-groups` · RLC Connect → `rlc-connect` · Student Life → `student-life` (/student-life/) · Kids Life → `kids-life` (/kidslife/) · Connect Card → `connect-card`.
+- **Rename** "LifeGroups" → **Life Groups** and "KidsLife" → **Kids Life**.
+- Facebook, Instagram and Pastor Brandon's Blog can keep their current icons.
+
+### Bible tab
+- **Top banner:** `bible-plans` (banner), replacing "Experience the Bible".
+- **SOAP Bible Reading Plan:** thumbnail `daily-reading`, linking to /daily/ (today's chapter and SOAP).
+- **Every other reading plan** (Making Sense of God, How to Forgive…): thumbnail `bible-plans` (square), replacing the repeated "Bible" picture.
+
+### More tab
+- **Top banner:** `welcome-home` (banner), replacing the old green "Real Life Church / Welcome Home" banner.
+- **Remove the Twitter button.**
+- Keep View Map, Give, Online Connection Card, Facebook and Website.
+
+### App icon
+`app-icon-black-on-white-1024.png` (or the white-on-black version).
