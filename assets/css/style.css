@@ -798,6 +798,9 @@ body.bare { background: var(--bg-soft); }
 .ah-cards .img-card p { font-size: .88rem; }
 .ah-cards .img-card .go { right: 14px; bottom: 16px; width: 28px; height: 28px; }
 .ah-cards .img-card .text { padding-right: 34px; }
+.ah-list { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 0 16px; }
+.ah-list li:last-child { border-bottom: 0; }
+.ah-list li { padding: 14px 0; }
 .ah-contact { text-align: center; margin-top: 36px; color: var(--muted); }
 .ah-contact img { width: 150px; margin: 0 auto 12px; }
 .ah-contact a { color: var(--ink); text-decoration: none; }

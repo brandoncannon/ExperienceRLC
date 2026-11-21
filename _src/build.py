@@ -39,6 +39,10 @@ LINKS = {
     "text_alerts": "sms:94000?&body=reallife",
     "counseling_form": "https://forms.gle/Je6UF3yQepL8sQFy9",
     "maps": "https://maps.google.com/?q=2714+Scottsville+Road+Bowling+Green+KY+42104",
+    # TEMPORARY: Message Notes use Subsplash's built-in notes (the same link as
+    # "Current Message Notes" on the app's Messages tab). When our own notes at
+    # /notes/ are ready, change this one line back to "/notes/" and rebuild.
+    "notes": "https://notes.subsplash.com/fill-in/view?app=FD65J8",
 }
 
 NAV = [
@@ -362,7 +366,7 @@ def build():
             head_extra=meta.get("head", ""),
             og_image=og_image,
             # Message Notes stay unlisted (link only) while they're being tried out.
-            robots='<meta name="robots" content="noindex">\n' if slug in ("404", "offline", "app-home") or slug.startswith(("notes", "worship-guide")) else "",
+            robots='<meta name="robots" content="noindex">\n' if slug in ("404", "offline") or slug.startswith(("notes", "worship-guide", "app-")) else "",
             ld="" if slug == "404" else structured_data(path, title),
             nav=render_nav(path),
             give=link_attrs(LINKS["give"]),
@@ -391,7 +395,7 @@ def build():
         print("built", out.relative_to(ROOT))
 
     # Sitemap for search engines.
-    slugs = [sl for sl, _ in entries if sl not in ("offline", "app-home") and not sl.startswith(("notes", "worship-guide"))]
+    slugs = [sl for sl, _ in entries if sl != "offline" and not sl.startswith(("notes", "worship-guide", "app-"))]
     urls = ["/" if sl == "index" else f"/{sl}/" for sl in slugs if sl != "404"]
     (ROOT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
