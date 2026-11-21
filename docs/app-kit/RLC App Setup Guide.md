@@ -27,6 +27,9 @@ Enter these where Subsplash asks for app colors:
 | Soft background | Cream | `#E8DFCE` |
 | Text | Charcoal | `#4D4D4D` |
 
+### Light or dark?
+To look like the website, switch the app to a **light** appearance (white background) with **navy #153C5D** as the main/accent color, if Subsplash offers that setting for your app (look under App Builder → Theme, Appearance or Branding). See "Preview - Dark vs Light.png". If your Subsplash plan only offers dark, the new graphics still work well on black.
+
 ## 3. Tile graphics
 
 Every topic comes in three shapes. Subsplash asks for different ones in different places (lists, home-screen tiles, headers):

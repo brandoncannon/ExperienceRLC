@@ -773,3 +773,33 @@ html.lights-down .n-hero.has-art { background: var(--s-bg); }
 .legacy-banner-btn svg { width: 16px; height: 16px; }
 .legacy-banner:hover .legacy-banner-btn { transform: translateX(3px); }
 .legacy-banner:focus-visible { outline: 3px solid #e8c670; outline-offset: -3px; }
+
+/* ---------- App home (/app-home/, shown inside the RLC app) ---------- */
+body.bare { background: var(--bg-soft); }
+.ah-hero { position: relative; isolation: isolate; color: #fff; text-align: center; padding: 64px 20px 92px; overflow: hidden; }
+.ah-hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(9,27,43,.35), rgba(9,27,43,.75)); }
+.ah-hero h1 { color: #fff; font-size: clamp(2.6rem, 11vw, 4rem); margin: 0 0 14px; line-height: 1; }
+.ah-hero .eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; }
+.ah-wrap { width: min(640px, 100% - 32px); margin: -60px auto 0; position: relative; padding-bottom: 32px; }
+.ah-today { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; background: var(--charcoal); color: #dbe7ef; border-radius: var(--radius); padding: 22px 22px 20px; text-decoration: none; box-shadow: 0 18px 40px rgba(9,27,43,.22); }
+.ah-today:hover { color: #dbe7ef; }
+.ah-today .eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; margin: 0; }
+.ah-today strong { color: #fff; font-size: 1.7rem; line-height: 1.15; }
+.ah-today small { font-size: 1rem; margin-bottom: 12px; }
+.ah-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.ah-grid a { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 14px; text-decoration: none; color: var(--ink); font-weight: 700; font-size: 1rem; line-height: 1.2; }
+.ah-grid a:hover { border-color: var(--accent); color: var(--ink); }
+.ah-ic { flex-shrink: 0; width: 42px; height: 42px; border-radius: 12px; background: var(--charcoal); display: grid; place-items: center; }
+.ah-ic svg { width: 22px; height: 22px; fill: none; stroke: var(--accent); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.ah-h2 { font-size: 1.5rem; margin: 32px 0 14px; }
+.ah-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.ah-cards .img-card { min-height: 190px; padding: 18px; border-radius: 14px; }
+.ah-cards .img-card h3 { font-size: 1.15rem; }
+.ah-cards .img-card p { font-size: .88rem; }
+.ah-cards .img-card .go { right: 14px; bottom: 16px; width: 28px; height: 28px; }
+.ah-cards .img-card .text { padding-right: 34px; }
+.ah-contact { text-align: center; margin-top: 36px; color: var(--muted); }
+.ah-contact img { width: 150px; margin: 0 auto 12px; }
+.ah-contact a { color: var(--ink); text-decoration: none; }
+.ah-contact .socials { justify-content: center; margin-top: 14px; }
+.ah-contact .socials a { color: #fff; }
