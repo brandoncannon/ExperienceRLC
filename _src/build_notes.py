@@ -315,6 +315,8 @@ def render(msg, cache, all_msgs):
     if m.get("banner"):
         banner = f'<img class="n-banner" src="/assets/img/series/{html.escape(m["banner"])}" alt="">'
         hero_cls += " has-banner"
+        if "has-art" not in hero_cls:
+            hero_cls += " has-art"  # use the series colors behind the graphic
     colors = [c.strip() for c in m.get("colors", "").split(",") if re.fullmatch(r"#[0-9a-fA-F]{6}", c.strip())]
     if len(colors) == 2:
         theme = f' style="--s-bg:{colors[0]};--s-fg:{colors[1]}"'

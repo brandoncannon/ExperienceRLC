@@ -692,13 +692,12 @@ html.lights-down .n-hero.has-art { background: var(--s-bg); }
 .n-hero.has-banner .n-art { display: none; }
 .n-hero.has-banner > .n-banner { margin-top: 0; }
 @media (max-width: 700px) {
-  .n-banner { width: 150%; max-width: none; margin-left: -25%; }
-  .n-hero.has-banner .wrap-narrow { margin-top: -22.5%; }
+  .n-banner { width: 100%; margin-left: 0; }
 }
-/* Trim the graphic's empty top and bottom (the logo sits in the middle). */
-.n-banner { aspect-ratio: 1664 / 620; object-fit: cover; }
-.n-hero.has-banner .wrap-narrow { margin-top: calc(min(900px, 100%) * -0.1); }
-@media (max-width: 700px) { .n-hero.has-banner .wrap-narrow { margin-top: -12%; } }
+/* Show the whole series graphic; the title sits below it. */
+.n-banner { aspect-ratio: auto; object-fit: contain; }
+.n-hero.has-banner .wrap-narrow { margin-top: clamp(18px, 3vw, 28px); }
+@media (max-width: 700px) { .n-hero.has-banner .wrap-narrow { margin-top: 18px; } }
 /* "Go deeper" link to the day's Bible Breakdown blog post */
 .blog-link { display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; background: var(--tint); border-radius: var(--radius); padding: 22px clamp(22px, 4vw, 40px); margin-bottom: 24px; }
 .blog-link .eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; margin-bottom: 4px; }
