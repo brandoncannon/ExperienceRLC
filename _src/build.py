@@ -39,10 +39,9 @@ LINKS = {
     "text_alerts": "sms:94000?&body=reallife",
     "counseling_form": "https://forms.gle/Je6UF3yQepL8sQFy9",
     "maps": "https://maps.google.com/?q=2714+Scottsville+Road+Bowling+Green+KY+42104",
-    # TEMPORARY: Message Notes use Subsplash's built-in notes (the same link as
-    # "Current Message Notes" on the app's Messages tab). When our own notes at
-    # /notes/ are ready, change this one line back to "/notes/" and rebuild.
-    "notes": "https://notes.subsplash.com/fill-in/view?app=FD65J8",
+    # Message Notes everywhere (app home, app Messages tab, worship guide): the
+    # website's own notes page, updated every Friday from the notes in Google Drive.
+    "notes": "/notes/",
 }
 
 NAV = [

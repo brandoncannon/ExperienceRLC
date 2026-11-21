@@ -319,6 +319,11 @@ def render(msg, cache, all_msgs):
     if len(colors) == 2:
         theme = f' style="--s-bg:{colors[0]};--s-fg:{colors[1]}"'
 
+    # Weeks with no fill-in blanks (e.g. "At the Movies") skip the blank counter and tip.
+    progress = (f'<span class="n-progress" aria-live="polite"><b data-filled>0</b> of {len(blanks)} blanks filled</span>'
+                if blanks else "")
+    hint = ('<p class="n-hint">Tap a blank to fill it in. It turns green when it matches. Everything you type saves on this phone.</p>'
+            if blanks else '<p class="n-hint">Everything you type saves on this phone.</p>')
     body = f"""
 <div class="notes{' has-theme' if theme else ''}"{theme} data-date="{m['date']}" data-title="{html.escape(plain(m.get('title', '')))}" data-series="{html.escape(m.get('series', ''))}" data-speaker="{html.escape(m.get('speaker', ''))}">
 <section class="{hero_cls}">
@@ -334,7 +339,7 @@ def render(msg, cache, all_msgs):
 
 <div class="n-tools" role="toolbar" aria-label="Notes settings">
   <div class="wrap-narrow">
-    <span class="n-progress" aria-live="polite"><b data-filled>0</b> of {len(blanks)} blanks filled</span>
+    {progress}
     <span class="n-tool-buttons">
       <button type="button" class="n-tool" data-reveal aria-pressed="false">{ICON['eye']}<span>Fill them in</span></button>
       <button type="button" class="n-tool" data-textsize aria-label="Text size">{ICON['text']}<span>Size</span></button>
@@ -344,7 +349,7 @@ def render(msg, cache, all_msgs):
 </div>
 
 <div class="wrap-narrow n-body">
-  <p class="n-hint">Tap a blank to fill it in. It turns green when it matches. Everything you type saves on this phone.</p>
+  {hint}
   <div class="n-intro">{intro}</div>
   {''.join(points)}
   {challenge}
