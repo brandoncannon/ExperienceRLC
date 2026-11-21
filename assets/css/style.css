@@ -748,3 +748,16 @@ html.lights-down .n-hero.has-art { background: var(--s-bg); }
 .guide-links { margin-top: -28px; position: relative; }
 .blog-link-note { flex-basis: 100%; margin: -4px 0 0; color: var(--muted); font-size: .92rem; }
 .blog-link .btn svg { width: 18px; height: 18px; }
+
+/* ---------- Installed app (Add to Home Screen) ---------- */
+/* Get the App page */
+.app-hero-icon { width: 120px; height: 120px; border-radius: 28px; box-shadow: 0 10px 30px rgba(9, 27, 43, .18); margin: 0 auto 20px; }
+.app-hero p { margin-left: auto; margin-right: auto; }
+.install-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(22px, 4vw, 36px); margin-bottom: 20px; }
+.install-card h2 { font-size: 1.5rem; }
+.install-steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.install-steps li { display: flex; gap: 14px; align-items: flex-start; font-size: 1.08rem; }
+.install-steps .num { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: var(--charcoal); color: #fff; font-weight: 800; display: grid; place-items: center; }
+.install-steps .glyph svg { width: 20px; height: 20px; vertical-align: -4px; color: #007aff; }
+.app-icon.light { background: #fff; border: 1px solid var(--line); }
+.app-icon.light img { width: 56px; height: 56px; }

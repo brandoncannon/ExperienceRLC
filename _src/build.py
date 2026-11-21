@@ -72,7 +72,7 @@ NAV = [
         ("RLC Podcast", LINKS["podcast"]),
         ("The Bible Breakdown Podcast", LINKS["bible_podcast"]),
         ("Pastor Brandon's Blog", LINKS["blog"]),
-        ("Mobile App", LINKS["app"]),
+        ("Get the App", "/app/"),
     ]),
     ("Contact", "/contact/"),
 ]
@@ -223,8 +223,13 @@ LAYOUT = """<!doctype html>
 {robots}{ld}
 <meta name="theme-color" content="#153c5d">
 <link rel="icon" href="/assets/img/favicon.png" sizes="32x32">
-<link rel="icon" href="/assets/img/icon-192.png" sizes="192x192">
+<link rel="icon" href="/assets/img/app-icon-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="RLC">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -271,6 +276,7 @@ LAYOUT = """<!doctype html>
 </footer>
 <script src="/assets/js/main.js" defer></script>
 <script src="/assets/js/count.js" defer></script>
+<script src="/assets/js/app.js" defer></script>
 </body>
 </html>
 """
@@ -338,6 +344,7 @@ def build():
         body = re.sub(r"\{\{link:(\w+)\}\}", lambda m: LINKS[m.group(1)], body)
         body = re.sub(r"\{\{icon:(\w+)\}\}", lambda m: ICONS[m.group(1)], body)
         body = body.replace("{{socials}}", socials())
+        body = body.replace("{{share_icon}}", '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>')
         if "{{announcements}}" in body:
             for k, v in worship_guide_parts().items():
                 body = body.replace("{{" + k + "}}", v)
@@ -355,7 +362,7 @@ def build():
             head_extra=meta.get("head", ""),
             og_image=og_image,
             # Message Notes stay unlisted (link only) while they're being tried out.
-            robots='<meta name="robots" content="noindex">\n' if slug == "404" or slug.startswith(("notes", "worship-guide")) else "",
+            robots='<meta name="robots" content="noindex">\n' if slug in ("404", "offline") or slug.startswith(("notes", "worship-guide")) else "",
             ld="" if slug == "404" else structured_data(path, title),
             nav=render_nav(path),
             give=link_attrs(LINKS["give"]),
@@ -377,7 +384,7 @@ def build():
         print("built", out.relative_to(ROOT))
 
     # Sitemap for search engines.
-    slugs = [sl for sl, _ in entries if not sl.startswith(("notes", "worship-guide"))]
+    slugs = [sl for sl, _ in entries if sl != "offline" and not sl.startswith(("notes", "worship-guide"))]
     urls = ["/" if sl == "index" else f"/{sl}/" for sl in slugs if sl != "404"]
     (ROOT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'

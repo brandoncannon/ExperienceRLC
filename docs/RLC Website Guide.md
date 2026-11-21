@@ -78,6 +78,14 @@ These change often, so they live in other tools, and the website just links to t
 - **Get Connected** cards (year-round, not weekly) live in `_src/worship-guide/announcements.txt`. Each one is `## Title`, a line of text, and an optional `Link: Button text | https://...`. Easiest: tell Claude "Update the worship guide Get Connected cards: …" and paste them in.
 - **Buttons** (Connect Card, Give, Prayer Request, Events, Daily Reading, Watch Live, App) stay the same every week.
 
+## The RLC app (the website on your home screen)
+
+- **Install page:** https://www.experiencerlc.com/app/ (share this link). It shows iPhone or Android steps automatically, and Android gets a one-tap **Install** button.
+- When opened from the home screen it runs full-screen and looks exactly like the website (same header and ☰ menu).
+- It **is** the website, so every website change shows up in the app. Nothing to update separately.
+- Pages people have opened are saved for when they're offline (`sw.js`). App name, icon and colors: `manifest.webmanifest`; icons in `assets/img/app-icon-*.png`.
+- Visits from the installed app show in GoatCounter with `?source=app` on the home page.
+
 ## Visitor numbers
 
 - **Dashboard:** https://experiencerlc.goatcounter.com (log in with the email you used to sign up).
