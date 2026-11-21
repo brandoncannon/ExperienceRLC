@@ -1,0 +1,23 @@
+{
+  "id": "/",
+  "name": "Real Life Church",
+  "short_name": "RLC",
+  "description": "Real Life Church in Bowling Green, KY: daily Bible reading and SOAP, message notes, worship guide, giving and more.",
+  "start_url": "/?source=app",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    { "src": "/assets/img/app-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/img/app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/img/app-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Daily Reading & SOAP", "short_name": "Daily Reading", "url": "/daily/", "icons": [{ "src": "/assets/img/app-icon-192.png", "sizes": "192x192" }] },
+    { "name": "Worship Guide", "url": "/worship-guide/", "icons": [{ "src": "/assets/img/app-icon-192.png", "sizes": "192x192" }] },
+    { "name": "Message Notes", "url": "/notes/", "icons": [{ "src": "/assets/img/app-icon-192.png", "sizes": "192x192" }] },
+    { "name": "Watch Live", "url": "/watch-live/", "icons": [{ "src": "/assets/img/app-icon-192.png", "sizes": "192x192" }] }
+  ]
+}

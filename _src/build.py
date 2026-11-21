@@ -72,7 +72,7 @@ NAV = [
         ("RLC Podcast", LINKS["podcast"]),
         ("The Bible Breakdown Podcast", LINKS["bible_podcast"]),
         ("Pastor Brandon's Blog", LINKS["blog"]),
-        ("Mobile App", LINKS["app"]),
+        ("Get the App", "/app/"),
     ]),
     ("Contact", "/contact/"),
 ]
@@ -223,8 +223,13 @@ LAYOUT = """<!doctype html>
 {robots}{ld}
 <meta name="theme-color" content="#153c5d">
 <link rel="icon" href="/assets/img/favicon.png" sizes="32x32">
-<link rel="icon" href="/assets/img/icon-192.png" sizes="192x192">
+<link rel="icon" href="/assets/img/app-icon-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="RLC">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -250,6 +255,13 @@ LAYOUT = """<!doctype html>
 <main id="main">
 {body}
 </main>
+<nav class="app-tabbar" aria-label="App">
+  <a href="/" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></a>
+  <a href="/watch-live/" data-tab="watch"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M10 8.5l4.5 2.5-4.5 2.5z"/><path d="M8 21h8"/></svg><span>Watch</span></a>
+  <a href="/daily/" data-tab="daily"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M12 7v6M9 10h6"/></svg><span>Daily</span></a>
+  <a href="/give/" data-tab="give"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></svg><span>Give</span></a>
+  <button type="button" class="app-more"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span>More</span></button>
+</nav>
 <footer class="site-footer">
   <div class="wrap">
     <div class="footer-top">
@@ -271,6 +283,7 @@ LAYOUT = """<!doctype html>
 </footer>
 <script src="/assets/js/main.js" defer></script>
 <script src="/assets/js/count.js" defer></script>
+<script src="/assets/js/app.js" defer></script>
 </body>
 </html>
 """
@@ -338,6 +351,7 @@ def build():
         body = re.sub(r"\{\{link:(\w+)\}\}", lambda m: LINKS[m.group(1)], body)
         body = re.sub(r"\{\{icon:(\w+)\}\}", lambda m: ICONS[m.group(1)], body)
         body = body.replace("{{socials}}", socials())
+        body = body.replace("{{share_icon}}", '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>')
         if "{{announcements}}" in body:
             for k, v in worship_guide_parts().items():
                 body = body.replace("{{" + k + "}}", v)
@@ -355,7 +369,7 @@ def build():
             head_extra=meta.get("head", ""),
             og_image=og_image,
             # Message Notes stay unlisted (link only) while they're being tried out.
-            robots='<meta name="robots" content="noindex">\n' if slug == "404" or slug.startswith(("notes", "worship-guide")) else "",
+            robots='<meta name="robots" content="noindex">\n' if slug in ("404", "offline") or slug.startswith(("notes", "worship-guide")) else "",
             ld="" if slug == "404" else structured_data(path, title),
             nav=render_nav(path),
             give=link_attrs(LINKS["give"]),
@@ -377,7 +391,7 @@ def build():
         print("built", out.relative_to(ROOT))
 
     # Sitemap for search engines.
-    slugs = [sl for sl, _ in entries if not sl.startswith(("notes", "worship-guide"))]
+    slugs = [sl for sl, _ in entries if sl != "offline" and not sl.startswith(("notes", "worship-guide"))]
     urls = ["/" if sl == "index" else f"/{sl}/" for sl in slugs if sl != "404"]
     (ROOT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
