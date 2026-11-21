@@ -805,3 +805,9 @@ body.bare { background: var(--bg-soft); }
 .ah-contact a { color: var(--ink); text-decoration: none; }
 .ah-contact .socials { justify-content: center; margin-top: 14px; }
 .ah-contact .socials a { color: #fff; }
+/* Message Notes: link buttons ("Link: Text | https://...") and extra boxes ("## Go Deeper") */
+.n-link { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 10px 0; padding: 14px 18px; border-radius: var(--radius-sm); background: var(--tint); color: var(--ink); font-weight: 700; text-decoration: none; }
+.n-link:hover { background: var(--aqua, #9ECBD1); }
+.n-link-go { font-size: 1.2em; }
+.n-extra .n-link:last-child { margin-bottom: 0; }
+html.lights-down .n-link { background: rgba(255,255,255,.08); color: #fff; }

@@ -29,9 +29,16 @@ It reads the way a printed handout does:
     ## This Week
     The weekly challenge.
 
+    ## Go Deeper                     (any other ## heading makes its own box)
+    Link: Watch the bonus video | https://...
+    Link: Read the article | https://...
+
+Link: Button text | https://...  makes a button anywhere in the notes.
+Notes can be for any date, not just Sundays (e.g. a Christmas Eve Eve service).
+
 [Brackets] make a fill-in-the-blank, *stars* make italics.
 
-The newest file becomes /notes/; every file also gets its own page at
+/notes/ shows the next message on or after today (then the newest); every file also gets its own page at
 /notes/2026-11-15/. Scripture text comes from Tyndale's NLT API and is
 saved in _src/notes/nlt-cache.json, so each passage is fetched only once.
 """
@@ -40,7 +47,7 @@ import json
 import re
 import urllib.parse
 import urllib.request
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 SRC = Path(__file__).resolve().parent
@@ -125,7 +132,7 @@ def parse(path):
         k, _, v = lines[i].partition(":")
         meta[k.strip().lower()] = v.strip()
         i += 1
-    msg = {"meta": meta, "intro": [], "points": [], "questions": [], "challenge": [], "talk_title": "Talk It Over"}
+    msg = {"meta": meta, "intro": [], "points": [], "questions": [], "challenge": [], "extras": [], "talk_title": "Talk It Over"}
     target = msg["intro"]
     section = None
     for line in lines[i:]:
@@ -145,13 +152,23 @@ def parse(path):
                 msg["talk_title"] = s[3:].strip()
                 section = "talk"
                 target = msg["questions"]
-            else:
+            elif "this week" in section or "challenge" in section:
                 target = msg["challenge"]
+            else:
+                extra = {"title": s[3:].strip(), "items": []}
+                msg["extras"].append(extra)
+                section = None
+                target = extra["items"]
         elif s.startswith("# "):
             section = None
             point = {"title": s[2:].strip(), "items": []}
             msg["points"].append(point)
             target = point["items"]
+        elif low.startswith("link:") and "http" in s:
+            label, _, url = s.split(":", 1)[1].partition("|")
+            if not url.strip():
+                label, url = "Open link", label
+            target.append(("link", (label.strip(), url.strip())))
         elif section == "talk":
             target.append(s.lstrip("- ").strip())
         elif low.startswith("scripture:"):
@@ -220,6 +237,12 @@ def render_items(items, blanks, cache, point_id):
             )
         elif kind == "bullet":
             bullets.append(inline(text, blanks))
+        elif kind == "link":
+            label, url = text
+            out.append(
+                f'<a class="n-link" href="{html.escape(url)}" target="_blank" rel="noopener">'
+                f'<span>{html.escape(label)}</span><span class="n-link-go" aria-hidden="true">&rarr;</span></a>'
+            )
         elif kind == "quote":
             q = html.escape(text)
             out.append(
@@ -269,7 +292,11 @@ def render(msg, cache, all_msgs):
 
     questions = ""
     if msg["questions"]:
+        links = [q for q in msg["questions"] if isinstance(q, tuple)]
+        msg["questions"] = [q for q in msg["questions"] if not isinstance(q, tuple)]
         qs = "".join(f"<li>{inline(q, blanks)}</li>" for q in msg["questions"])
+        if links:
+            msg["extras"].append({"title": "More", "items": links})
         questions = (
             f'<details class="n-panel" id="talk"><summary><span><span class="n-label">For Life Groups &amp; family</span>{html.escape(msg["talk_title"])}</span>'
             f'<span class="n-count">{len(msg["questions"])} questions</span></summary><ol class="n-questions">{qs}</ol></details>'
@@ -283,12 +310,18 @@ def render(msg, cache, all_msgs):
             days.append(
                 f'<label class="n-day"><input type="checkbox" data-day="{d.isoformat()}"><span><b>{d:%a}</b>{d.day}</span></label>'
             )
-        text = "".join(f"<p>{inline(t, blanks)}</p>" for _, t in msg["challenge"])
+        text = render_items(msg["challenge"], blanks, cache, None)
         challenge = (
             '<section class="n-panel n-challenge" id="this-week"><p class="n-label">This week</p>'
             f'{text}<div class="n-days" role="group" aria-label="Days you did it">{"".join(days)}</div>'
             '<p class="n-muted n-streak" aria-live="polite"></p></section>'
         )
+
+    extras = "".join(
+        f'<section class="n-panel n-extra"><p class="n-label">{html.escape(x["title"])}</p>'
+        f'{render_items(x["items"], blanks, cache, None)}</section>'
+        for x in msg["extras"] if x["items"]
+    )
 
     video = ""
     if m.get("video"):
@@ -355,6 +388,7 @@ def render(msg, cache, all_msgs):
   <div class="n-intro">{intro}</div>
   {''.join(points)}
   {challenge}
+  {extras}
   {questions}
 
   <section class="n-panel n-send" id="send">
@@ -402,6 +436,20 @@ def pages():
     cache = _load_cache()
     msgs = [parse(f) for f in files]
     out = [(f"notes/{x['meta']['date']}", render(x, cache, msgs)) for x in msgs]
-    out.insert(0, ("notes", render(msgs[0], cache, msgs)))
+    # /notes/ is the next message on or after today (Central), so a midweek service
+    # (Christmas Eve Eve) doesn't replace Sunday's notes early. The small script
+    # moves to the next one once a date has passed, with no rebuild needed.
+    today = (datetime.now(timezone.utc) - timedelta(hours=6)).date().isoformat()
+    upcoming = [x for x in msgs if x["meta"]["date"] >= today]
+    current = upcoming[-1] if upcoming else msgs[0]
+    dates = sorted(x["meta"]["date"] for x in msgs)
+    pick = (
+        "<script>(function(){var d=%s,c='%s',t=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Chicago'}).format(new Date()),"
+        "n=null;for(var i=0;i<d.length;i++){if(d[i]>=t){n=d[i];break}}if(!n)n=d[d.length-1];"
+        "if(n!==c)location.replace('./'+n+'/'+location.search+location.hash)})();</script>"
+    ) % (json.dumps(dates), current["meta"]["date"])
+    page = render(current, cache, msgs)
+    head, sep, rest = page.partition("-->\n<div class=\"notes")
+    out.insert(0, ("notes", head + "-->\n" + pick + "\n<div class=\"notes" + rest))
     CACHE.write_text(json.dumps(cache, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     return out
