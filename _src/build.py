@@ -255,13 +255,6 @@ LAYOUT = """<!doctype html>
 <main id="main">
 {body}
 </main>
-<nav class="app-tabbar" aria-label="App">
-  <a href="/" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></a>
-  <a href="/watch-live/" data-tab="watch"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M10 8.5l4.5 2.5-4.5 2.5z"/><path d="M8 21h8"/></svg><span>Watch</span></a>
-  <a href="/daily/" data-tab="daily"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M12 7v6M9 10h6"/></svg><span>Daily</span></a>
-  <a href="/give/" data-tab="give"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></svg><span>Give</span></a>
-  <button type="button" class="app-more"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span>More</span></button>
-</nav>
 <footer class="site-footer">
   <div class="wrap">
     <div class="footer-top">

@@ -11,23 +11,6 @@
     });
   }
 
-  // App tab bar: highlight the current tab; "More" opens the menu.
-  var bar = document.querySelector(".app-tabbar");
-  if (bar) {
-    var norm = function (p) { return p.replace(/index\.html$/, ""); };
-    var here = norm(location.pathname);
-    bar.querySelectorAll("a[data-tab]").forEach(function (a) {
-      var target = norm(a.pathname);
-      var match = a.getAttribute("data-tab") === "home" ? here === target : here.indexOf(target) === 0;
-      if (a.host === location.host && match) a.setAttribute("aria-current", "page");
-    });
-    var more = bar.querySelector(".app-more");
-    if (more) more.addEventListener("click", function () {
-      var t = document.querySelector(".menu-toggle");
-      if (t) { t.click(); window.scrollTo(0, 0); }
-    });
-  }
-
   // "Get the App" page: install button (Android/Chrome) and the right steps per phone.
   var ua = navigator.userAgent;
   var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
