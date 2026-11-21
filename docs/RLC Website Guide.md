@@ -86,6 +86,13 @@ These change often, so they live in other tools, and the website just links to t
 - Pages people have opened are saved for when they're offline (`sw.js`). App name, icon and colors: `manifest.webmanifest`; icons in `assets/img/app-icon-*.png`.
 - Visits from the installed app show in GoatCounter with `?source=app` on the home page.
 
+## App opening screen (for the Subsplash app)
+
+- **Address:** https://www.experiencerlc.com/app-home/ (set the app's Welcome tab to open this web page).
+- Looks like the website but without the website's header and footer, since the app has its own top bar and tabs. Unlisted (not in the menu or Google).
+- Shows today's chapter and SOAP title automatically, quick buttons (Message Notes, Worship Guide, Watch Live, Give, Events, Connect Card, Prayer Request, Life Groups), Get Connected cards and contact info.
+- Edit it in `_src/pages/app-home.html`, or ask Claude.
+
 ## Visitor numbers
 
 - **Dashboard:** https://experiencerlc.goatcounter.com (log in with the email you used to sign up).
