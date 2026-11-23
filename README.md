@@ -45,5 +45,12 @@ never show early. A day with no SOAP shows "coming soon."
 
 Settings (author name, Bible version) are in `assets/config.js`.
 
+### Updating SOAPs from cannonstudybible.com
+
+Run `python3 scripts/update_soaps.py`. It pulls every SOAP that matches a day in the
+reading plan, rewrites `data/soaps/`, and lists new and edited SOAPs plus upcoming
+reading days that still have no SOAP. A weekly scheduled Claude task runs this and
+pushes the result.
+
 ### Hosting
 Turn on GitHub Pages: repo **Settings → Pages → Deploy from branch → `gh-pages` / root**.
