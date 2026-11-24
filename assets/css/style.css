@@ -821,3 +821,56 @@ html.lights-down .n-link { background: rgba(255,255,255,.08); color: #fff; }
 .app-option h2, .app-option-head h2 { margin-top: 0; }
 .app-option-head { margin: 36px 0 16px; }
 .app-option-head p { color: var(--muted); margin: 0; }
+
+/* ---------- Next Steps: five stages ---------- */
+.ns-btn-checkin { background: var(--accent); color: var(--ink); }
+.ns-btn-checkin:hover { background: #fff; color: var(--ink); }
+.ns-legend { border-bottom: 1px solid var(--line); background: #fff; }
+.ns-legend .wrap { display: flex; flex-wrap: wrap; gap: 10px 36px; padding: 18px 0; font-size: 1rem; color: var(--muted); }
+.ns-legend strong { color: var(--ink); margin-right: 6px; }
+.ns-dot { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 8px; vertical-align: -1px; }
+.ns-dot.know, .ns-steps li.know::before { background: var(--ink); }
+.ns-dot.grow, .ns-steps li.grow::before { background: var(--steel); }
+.ns-dot.share, .ns-steps li.share::before { background: var(--accent); box-shadow: inset 0 0 0 1px rgba(21,60,93,.25); }
+.ns-stages-section { background: var(--bg-soft); }
+.ns-h2 { margin: 0 0 10px; }
+.ns-lead { max-width: 58ch; color: var(--muted); margin: 0 0 40px; font-size: 1.1rem; }
+.ns-stages { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 28px; }
+.ns-stage-top { display: flex; align-items: center; gap: 12px; min-height: 64px; }
+.ns-num { display: grid; place-items: center; border-radius: 50%; background: var(--ink); color: #fff; font-weight: 800; }
+.ns-stage:nth-child(1) .ns-num { width: 36px; height: 36px; font-size: .95rem; }
+.ns-stage:nth-child(2) .ns-num { width: 42px; height: 42px; font-size: 1.05rem; }
+.ns-stage:nth-child(3) .ns-num { width: 48px; height: 48px; font-size: 1.15rem; }
+.ns-stage:nth-child(4) .ns-num { width: 54px; height: 54px; font-size: 1.3rem; }
+.ns-stage:nth-child(5) .ns-num { width: 60px; height: 60px; font-size: 1.45rem; }
+.ns-born { color: var(--accent-deep); font-size: .95rem; }
+.ns-stage h3 { font-size: clamp(1.35rem, 2vw, 1.6rem); margin: 14px 0 4px; color: var(--ink); }
+.ns-marked { font-style: italic; color: var(--muted); font-size: .95rem; line-height: 1.45; margin: 0; padding-bottom: 14px; border-bottom: 2px solid var(--line); }
+.ns-steps { list-style: none; margin: 0; padding: 0; }
+.ns-steps li { position: relative; padding: 14px 0 14px 22px; border-bottom: 1px solid var(--line); font-size: .98rem; line-height: 1.5; }
+.ns-steps li::before { content: ""; position: absolute; left: 0; top: 21px; width: 11px; height: 11px; border-radius: 3px; }
+.ns-steps strong { display: block; color: var(--ink); font-size: 1.08rem; margin-bottom: 2px; }
+.ns-steps span { color: var(--text); }
+.ns-again { display: flex; align-items: center; gap: 10px; margin: 18px 0 0; padding: 14px 16px; border: 2px solid var(--steel); border-radius: var(--radius-sm); background: #fff; color: var(--ink); font-weight: 700; line-height: 1.35; }
+.ns-again svg { width: 22px; height: 22px; flex-shrink: 0; color: var(--steel); }
+.ns-band p { margin: 0; max-width: 60ch; }
+.ns-values { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 28px; margin-top: 28px; }
+.ns-values h3 { font-size: 1.2rem; color: var(--ink); margin: 0 0 6px; }
+.ns-values p { margin: 0; font-size: .98rem; color: var(--muted); }
+.ns-wheel-section { background: var(--bg-soft); }
+.ns-wheel { display: block; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.ns-credit { font-size: .9rem; color: var(--muted); margin-top: 28px; }
+@media (max-width: 1100px) {
+  .ns-stages { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 28px; }
+  .ns-values { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .ns-stages { grid-template-columns: 1fr; gap: 12px; }
+  .ns-stage { background: #fff; border-radius: var(--radius); padding: 18px 20px 8px; box-shadow: var(--shadow); }
+  .ns-stage-top { min-height: 0; }
+  .ns-stage .ns-num { width: 44px !important; height: 44px !important; font-size: 1.1rem !important; }
+  .ns-steps li:last-child { border-bottom: 0; }
+  .ns-again { margin-bottom: 12px; }
+  .ns-values { grid-template-columns: 1fr; gap: 20px; }
+  .ns-legend .wrap { flex-direction: column; }
+}
