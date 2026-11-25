@@ -59,6 +59,7 @@ NAV = [
     ("Next Steps", [
         ("Next Steps", "/next-steps/"),
         ("Water Baptism", "/water-baptism/"),
+        ("Membership", "/membership/"),
         ("Daily Reading & SOAP", "/daily/"),
         ("The Bible", "/the-bible/"),
         ("Life Groups", "/life-groups/"),
