@@ -49,3 +49,13 @@ Page addresses match the old WordPress site (`/new-here/`, `/leadership/`, `/kid
 - **Backup Bible text:** `daily/data/bible/` (World English Bible, public domain), used only if the NLT can't load.
 - **Podcast, YouTube & blog links:** `daily/data/media.json`, filled in automatically three times a day by the GitHub Action in `.github/workflows/update-media.yml` (it runs `_src/update_media.py`). It matches each day's chapter to the episode/video whose title starts with that chapter. To run it right away: GitHub → **Actions** → *Update daily podcast & video links* → **Run workflow**.
 - **Settings:** `assets/js/daily-config.js` (author name, NLT API key, translation for the "read in another translation" link).
+
+## Membership course (`/membership/`)
+
+A four-part membership course: (1) the Gospel and why membership matters, (2) vision and values, (3) the four commitments, (4) beliefs, leadership, and how to join. Page content is in `_src/pages/membership.html`; video scripts are in `docs/Membership Video Scripts.md`.
+
+- **Videos:** each part has a placeholder marked `<!-- VIDEO: ... -->`. Replace the `<div class="mb-video-ph">…</div>` inside it with a YouTube embed:
+  ```html
+  <div class="mb-video"><iframe src="https://www.youtube.com/embed/VIDEO_ID" title="Membership Part 1" allowfullscreen></iframe></div>
+  ```
+- **Form:** the "Fill out the membership form" button uses `membership_form` in `_src/build.py`. It points to the Connect Card for now; change it to the Church Center membership form once that exists.

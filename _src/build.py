@@ -28,6 +28,9 @@ LINKS = {
     "events": "https://experiencerlc.churchcenter.com/registrations/events",
     "groups": "https://experiencerlc.churchcenter.com/groups",
     "connect_card": "https://experiencerlc.churchcenter.com/people/forms/443983",
+    # Membership course (/membership/) sign-up. TODO: swap in the Church Center
+    # membership form once it exists; until then it uses the Connect Card.
+    "membership_form": "https://experiencerlc.churchcenter.com/people/forms/443983",
     "facebook": "https://www.facebook.com/reallifechurchbg/",
     "facebook_live": "https://www.facebook.com/experiencerlc",
     "instagram": "https://instagram.com/experience_rlc",
@@ -56,6 +59,7 @@ NAV = [
     ("Next Steps", [
         ("Next Steps", "/next-steps/"),
         ("Water Baptism", "/water-baptism/"),
+        ("Membership", "/membership/"),
         ("Daily Reading & SOAP", "/daily/"),
         ("The Bible", "/the-bible/"),
         ("Life Groups", "/life-groups/"),
