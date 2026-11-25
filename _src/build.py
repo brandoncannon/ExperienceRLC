@@ -28,9 +28,8 @@ LINKS = {
     "events": "https://experiencerlc.churchcenter.com/registrations/events",
     "groups": "https://experiencerlc.churchcenter.com/groups",
     "connect_card": "https://experiencerlc.churchcenter.com/people/forms/443983",
-    # Membership course (/membership/) sign-up. TODO: swap in the Church Center
-    # membership form once it exists; until then it uses the Connect Card.
-    "membership_form": "https://experiencerlc.churchcenter.com/people/forms/443983",
+    # Membership course (/membership/) sign-up form in Church Center.
+    "membership_form": "https://experiencerlc.churchcenter.com/people/forms/1377966",
     "facebook": "https://www.facebook.com/reallifechurchbg/",
     "facebook_live": "https://www.facebook.com/experiencerlc",
     "instagram": "https://instagram.com/experience_rlc",

@@ -58,4 +58,4 @@ A four-part membership course: (1) the Gospel and why membership matters, (2) vi
   ```html
   <div class="mb-video"><iframe src="https://www.youtube.com/embed/VIDEO_ID" title="Membership Part 1" allowfullscreen></iframe></div>
   ```
-- **Form:** the "Fill out the membership form" button uses `membership_form` in `_src/build.py`. It points to the Connect Card for now; change it to the Church Center membership form once that exists.
+- **Form:** the "Fill out the membership form" button uses `membership_form` in `_src/build.py`. It points to the Church Center membership form.
