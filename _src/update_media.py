@@ -157,7 +157,7 @@ def main():
     out = DATA / "media.json"
     media = json.loads(out.read_text(encoding="utf-8")) if out.exists() else {}
     before = json.dumps(media, sort_keys=True)
-    ok = True
+    failed, worked = [], 0
     # Normally only recent days are rechecked against the blog's post pages;
     # "--backfill" looks back over the whole year.
     since = date(date.today().year, 1, 1) if "--backfill" in sys.argv else date.today() - timedelta(days=10)
@@ -171,9 +171,10 @@ def main():
         try:
             n = match(plan, list(source()), kind, media)
             print(f"{kind}: {n} days linked")
+            worked += 1
         except Exception as err:  # keep going; one source failing shouldn't wipe the other
             print(f"{kind}: could not update ({err})", file=sys.stderr)
-            ok = False
+            failed.append(kind)
     # Blog posts for older days, read from each post's page.
     try:
         backfill = list(blog_backfill_items(plan, media, since))
@@ -196,7 +197,7 @@ def main():
         print(f"blog (post pages): {n} days linked, {older} linked to an earlier post")
     except Exception as err:
         print(f"blog backfill: could not update ({err})", file=sys.stderr)
-        ok = False
+        failed.append("blog backfill")
 
     after = json.dumps(media, sort_keys=True)
     if after != before:
@@ -204,7 +205,12 @@ def main():
         print("media.json updated")
     else:
         print("no changes")
-    return 0 if ok else 1
+    # A short outage at one site (YouTube answering 503, say) is only a warning:
+    # the other links are still saved, and the next run (a few hours later)
+    # picks up what was missed. Fail only when nothing could be reached.
+    if failed:
+        print(f"::warning::Could not reach {', '.join(failed)} this run; the next run will try again.")
+    return 0 if worked else 1
 
 
 if __name__ == "__main__":
